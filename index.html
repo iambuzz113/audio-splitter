@@ -1,0 +1,284 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1.25rem 0}
+h2{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.zone{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:2rem 1rem;text-align:center;cursor:pointer;transition:background .15s;margin-bottom:1rem}
+.zone:hover,.zone.over{background:var(--color-background-secondary)}
+.zone i{font-size:32px;color:var(--color-text-secondary);display:block;margin-bottom:8px}
+.zone p{font-size:14px;color:var(--color-text-secondary)}
+.zone .fname{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-top:6px;word-break:break-all}
+textarea{width:100%;min-height:130px;font-size:13px;font-family:var(--font-mono);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);padding:10px;background:var(--color-background-primary);color:var(--color-text-primary);resize:vertical;margin-bottom:.75rem}
+.hint{font-size:12px;color:var(--color-text-tertiary);margin-bottom:1rem;line-height:1.6}
+.tracks-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:1rem;max-height:220px;overflow-y:auto}
+.track-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.track-row:last-child{border-bottom:none}
+.track-num{width:22px;height:22px;border-radius:50%;background:var(--color-background-info);color:var(--color-text-info);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.track-name{flex:1;color:var(--color-text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-time{color:var(--color-text-secondary);font-size:12px;flex-shrink:0}
+.btn{width:100%;padding:12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:15px;font-weight:500;cursor:pointer;margin-bottom:.75rem;transition:background .15s}
+.btn:hover{background:var(--color-background-secondary)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.btn.primary:hover{opacity:.88}
+.progress-wrap{margin-bottom:1rem;display:none}
+.prog-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:6px}
+.prog-bar{height:6px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--color-text-primary);border-radius:3px;transition:width .2s}
+.log{font-size:12px;color:var(--color-text-secondary);font-family:var(--font-mono);max-height:80px;overflow-y:auto;background:var(--color-background-secondary);padding:8px;border-radius:var(--border-radius-md);margin-bottom:.75rem;display:none}
+.results{display:none}
+.result-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);gap:8px}
+.result-item:last-child{border-bottom:none}
+.result-name{font-size:13px;color:var(--color-text-primary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-btn{font-size:12px;padding:4px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.warn{font-size:12px;color:var(--color-text-warning);background:var(--color-background-warning);padding:8px 10px;border-radius:var(--border-radius-md);margin-bottom:.75rem;display:none;line-height:1.5}
+</style>
+
+<div class="wrap">
+<h2><i class="ti ti-scissors" aria-hidden="true"></i> 音訊批次切割器</h2>
+<p class="sub">上傳音訊檔，貼上時間軸，一鍵切割下載</p>
+
+<div class="warn" id="warn"></div>
+
+<div class="zone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+  <i class="ti ti-music" aria-hidden="true"></i>
+  <p>點此選擇音訊檔案</p>
+  <p style="font-size:12px;margin-top:4px">MP3 / M4A / WAV / FLAC / AAC</p>
+  <p class="fname" id="fname"></p>
+</div>
+<input type="file" id="fileInput" accept="audio/*" style="display:none">
+
+<p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">時間軸（每行一首）</p>
+<textarea id="tsInput" placeholder="格式範例：
+00:00 醉夢人
+03:33 雨季唱片
+06:50 昨日的約定
+12:12 Just Like That Night（就像那晚）
+41:45 霧色倫敦"></textarea>
+<p class="hint">支援格式：<code>00:00 曲名</code> 或 <code>[00:00] 曲名</code>（也可貼 YouTube 章節格式）</p>
+
+<div id="preview" style="display:none">
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">解析結果 <span id="trackCount" style="color:var(--color-text-secondary);font-weight:400"></span></p>
+  <div class="tracks-box" id="tracksList"></div>
+</div>
+
+<button class="btn primary" id="splitBtn" disabled>
+  <i class="ti ti-cut" aria-hidden="true"></i> 開始切割
+</button>
+
+<div class="progress-wrap" id="progWrap">
+  <p class="prog-label" id="progLabel">載入 ffmpeg…</p>
+  <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+</div>
+<div class="log" id="log"></div>
+
+<div class="results" id="results">
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">
+    <i class="ti ti-check" aria-hidden="true"></i> 切割完成，點擊下載
+  </p>
+  <div id="resultsList"></div>
+  <button class="btn" id="dlAllBtn" style="margin-top:.75rem">
+    <i class="ti ti-download" aria-hidden="true"></i> 全部下載
+  </button>
+</div>
+</div>
+
+<script>
+const dropzone=document.getElementById('dropzone');
+const fileInput=document.getElementById('fileInput');
+const tsInput=document.getElementById('tsInput');
+const splitBtn=document.getElementById('splitBtn');
+const preview=document.getElementById('preview');
+const tracksList=document.getElementById('tracksList');
+const trackCount=document.getElementById('trackCount');
+const progWrap=document.getElementById('progWrap');
+const progLabel=document.getElementById('progLabel');
+const progFill=document.getElementById('progFill');
+const logEl=document.getElementById('log');
+const results=document.getElementById('results');
+const resultsList=document.getElementById('resultsList');
+const dlAllBtn=document.getElementById('dlAllBtn');
+const warnEl=document.getElementById('warn');
+const fnameEl=document.getElementById('fname');
+
+let audioFile=null;
+let parsedTracks=[];
+let outputBlobs=[];
+
+function showWarn(msg){warnEl.textContent=msg;warnEl.style.display=msg?'block':'none'}
+
+function parseTime(s){
+  s=s.trim().replace(/^\[|\]$/g,'');
+  const parts=s.split(':').map(Number);
+  if(parts.length===3)return parts[0]*3600+parts[1]*60+parts[2];
+  if(parts.length===2)return parts[0]*60+parts[1];
+  return 0;
+}
+
+function fmtTime(sec){
+  const h=Math.floor(sec/3600);
+  const m=Math.floor((sec%3600)/60);
+  const s=Math.floor(sec%60);
+  if(h>0)return`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return`${m}:${String(s).padStart(2,'0')}`;
+}
+
+function parseTracks(raw){
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  const re=/^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s+(.+)/;
+  const tracks=[];
+  for(const line of lines){
+    const m=line.match(re);
+    if(m)tracks.push({time:parseTime(m[1]),timeStr:m[1].replace(/^\[|\]$/g,''),name:m[2].trim()});
+  }
+  tracks.sort((a,b)=>a.time-b.time);
+  return tracks;
+}
+
+function updatePreview(){
+  parsedTracks=parseTracks(tsInput.value);
+  if(parsedTracks.length<1){preview.style.display='none';checkReady();return;}
+  preview.style.display='block';
+  trackCount.textContent=`${parsedTracks.length} 首`;
+  tracksList.innerHTML='';
+  parsedTracks.forEach((t,i)=>{
+    const end=parsedTracks[i+1];
+    const row=document.createElement('div');
+    row.className='track-row';
+    row.innerHTML=`<div class="track-num">${i+1}</div><div class="track-name">${t.name}</div><div class="track-time">${t.timeStr}${end?' → '+end.timeStr:' → 結尾'}</div>`;
+    tracksList.appendChild(row);
+  });
+  checkReady();
+}
+
+function checkReady(){
+  splitBtn.disabled=!(audioFile&&parsedTracks.length>0);
+}
+
+fileInput.addEventListener('change',e=>{
+  audioFile=e.target.files[0];
+  if(audioFile){fnameEl.textContent=audioFile.name;}
+  checkReady();
+});
+
+dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('over')});
+dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('over'));
+dropzone.addEventListener('drop',e=>{
+  e.preventDefault();dropzone.classList.remove('over');
+  const f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('audio/')){audioFile=f;fnameEl.textContent=f.name;checkReady();}
+});
+
+tsInput.addEventListener('input',updatePreview);
+
+function setProgress(pct,label){
+  progFill.style.width=pct+'%';
+  if(label)progLabel.textContent=label;
+}
+
+function addLog(msg){
+  logEl.style.display='block';
+  logEl.textContent+=msg+'\n';
+  logEl.scrollTop=logEl.scrollHeight;
+}
+
+function sanitize(name){
+  return name.replace(/[\/\\:*?"<>|]/g,'_').substring(0,80);
+}
+
+splitBtn.addEventListener('click',async()=>{
+  showWarn('');
+  outputBlobs=[];
+  resultsList.innerHTML='';
+  results.style.display='none';
+  logEl.textContent='';
+  logEl.style.display='none';
+  progWrap.style.display='block';
+  splitBtn.disabled=true;
+
+  try{
+    setProgress(5,'載入 ffmpeg.wasm…');
+    const {createFFmpeg,fetchFile}=FFmpeg;
+    const ffmpeg=createFFmpeg({
+      corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+      log:false
+    });
+    ffmpeg.setLogger(({type,message})=>{
+      if(type==='fferr'&&message.includes('time='))addLog(message);
+    });
+
+    await ffmpeg.load();
+    setProgress(20,'讀取音訊檔…');
+
+    const ext=audioFile.name.split('.').pop().toLowerCase();
+    const inputName='input.'+ext;
+    ffmpeg.FS('writeFile',inputName,await fetchFile(audioFile));
+
+    const total=parsedTracks.length;
+    for(let i=0;i<total;i++){
+      const t=parsedTracks[i];
+      const next=parsedTracks[i+1];
+      const outName=`${String(i+1).padStart(2,'0')}_${sanitize(t.name)}.mp3`;
+      const args=['-i',inputName,'-ss',String(t.time)];
+      if(next)args.push('-to',String(next.time));
+      args.push('-c','copy','-y',outName);
+
+      const pct=20+Math.round((i/total)*70);
+      setProgress(pct,`切割 ${i+1}/${total}：${t.name}`);
+      addLog(`▶ ${outName}`);
+
+      await ffmpeg.run(...args);
+
+      let data;
+      try{data=ffmpeg.FS('readFile',outName);}catch(e){
+        addLog(`⚠ 讀取失敗，嘗試重新編碼…`);
+        const args2=['-i',inputName,'-ss',String(t.time)];
+        if(next)args2.push('-to',String(next.time));
+        args2.push('-codec:a','libmp3lame','-q:a','2','-y',outName);
+        await ffmpeg.run(...args2);
+        data=ffmpeg.FS('readFile',outName);
+      }
+
+      const blob=new Blob([data.buffer],{type:'audio/mpeg'});
+      outputBlobs.push({name:outName,blob});
+      addLog(`✓ ${outName} (${(blob.size/1024/1024).toFixed(1)} MB)`);
+    }
+
+    setProgress(100,'完成！');
+    results.style.display='block';
+    outputBlobs.forEach(({name,blob})=>{
+      const url=URL.createObjectURL(blob);
+      const item=document.createElement('div');
+      item.className='result-item';
+      item.innerHTML=`<span class="result-name">${name}</span>`;
+      const a=document.createElement('a');
+      a.href=url;a.download=name;a.className='dl-btn';
+      a.innerHTML='<i class="ti ti-download" aria-hidden="true"></i> 下載';
+      item.appendChild(a);
+      resultsList.appendChild(item);
+    });
+
+  }catch(err){
+    showWarn('發生錯誤：'+err.message);
+    setProgress(0,'');
+    progWrap.style.display='none';
+  }
+
+  splitBtn.disabled=false;
+  checkReady();
+});
+
+dlAllBtn.addEventListener('click',()=>{
+  outputBlobs.forEach(({name,blob},i)=>{
+    setTimeout(()=>{
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=name;
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+    },i*600);
+  });
+});
+</script>
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
