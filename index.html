@@ -41,7 +41,6 @@ body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:
 .sec{margin-bottom:var(--g)}
 .lbl{font-size:var(--xs);font-weight:700;color:var(--ac);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 
-/* Upload */
 .ulabel{display:block;border:1.5px dashed var(--bd2);border-radius:var(--r);
   padding:clamp(26px,8vw,44px) var(--p);text-align:center;cursor:pointer;
   background:var(--sur);-webkit-tap-highlight-color:transparent;
@@ -58,6 +57,12 @@ body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:
   border-radius:100px;padding:4px 12px;color:var(--tx2)}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
+.engine-box{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);
+  padding:12px 14px;font-size:var(--xs);color:var(--tx2);line-height:1.7;display:none}
+.engine-box.on{display:block}
+.engine-row{display:flex;align-items:flex-start;gap:7px;margin-top:5px}
+.engine-row .dot{margin-top:3px}
+
 textarea{width:100%;min-height:clamp(110px,28vw,150px);background:var(--sur);
   border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);
   font-family:'DM Mono',monospace;font-size:var(--sm);line-height:1.9;
@@ -68,7 +73,6 @@ textarea::placeholder{color:var(--tx3)}
 .chip{font-size:var(--xs);font-family:'DM Mono',monospace;background:var(--sur2);
   border:1px solid var(--bd);border-radius:100px;padding:3px 10px;color:var(--tx2)}
 
-/* Preview */
 .prev{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;display:none}
 .prev.on{display:block}
 .prev-hdr{padding:10px 14px;border-bottom:1px solid var(--bd);
@@ -84,17 +88,6 @@ textarea::placeholder{color:var(--tx3)}
 .tname{font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ttime{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx2);white-space:nowrap}
 
-/* Engine info box */
-.engine-box{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);
-  padding:12px 14px;font-size:var(--sm)}
-.engine-title{font-weight:600;margin-bottom:6px;color:var(--tx)}
-.engine-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:var(--xs);color:var(--tx2);
-  border-bottom:1px solid var(--bd)}
-.engine-row:last-child{border-bottom:none}
-.engine-row .dot{margin-top:3px;flex-shrink:0}
-.engine-row b{color:var(--tx);font-weight:600}
-
-/* Go button */
 .gobtn{width:100%;padding:clamp(14px,4.2vw,19px);
   background:linear-gradient(135deg,var(--ac),var(--wn));
   border:none;border-radius:var(--r);color:#0f0f11;
@@ -105,49 +98,90 @@ textarea::placeholder{color:var(--tx3)}
 .gobtn:active{transform:scale(.97)}
 .gobtn:disabled{opacity:.32;cursor:not-allowed;transform:none}
 
-/* Progress */
 .prog{display:none}
 .prog.on{display:block}
 .prog-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .prog-lbl{font-size:var(--sm);color:var(--tx2)}
 .prog-pct{font-size:var(--sm);font-family:'DM Mono',monospace;color:var(--ac);font-weight:500}
-.prog-bar{height:6px;background:var(--sur2);border-radius:100px;overflow:hidden;margin-bottom:12px}
+.prog-bar{height:6px;background:var(--sur2);border-radius:100px;overflow:hidden;margin-bottom:14px}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--wn));
   border-radius:100px;transition:width .35s ease;width:0%}
 
-/* Track cards */
-.track-cards{display:flex;flex-direction:column;gap:10px;margin-top:var(--g)}
-.tcard{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;
-  transition:border-color .3s}
+/* iOS: one card at a time, with big download button */
+.ios-current{display:none;background:var(--sur);border:2px solid var(--ac);
+  border-radius:var(--r);padding:20px;text-align:center;margin-top:var(--g)}
+.ios-current.on{display:block}
+.ios-track-num{font-size:var(--xs);color:var(--ac);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.ios-track-name{font-size:var(--md);font-weight:700;margin-bottom:4px}
+.ios-track-time{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx2);margin-bottom:16px}
+.ios-dl-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;background:linear-gradient(135deg,var(--ac),var(--wn));
+  border:none;border-radius:var(--r);color:#0f0f11;font-size:var(--md);font-weight:700;
+  font-family:'Noto Sans TC',sans-serif;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  text-decoration:none;margin-bottom:12px}
+.ios-dl-btn:active{opacity:.8}
+.ios-dl-btn.off{background:var(--sur2);color:var(--tx2);opacity:.5;pointer-events:none}
+.ios-next-btn{display:none;width:100%;padding:13px;background:var(--sur2);
+  border:1px solid var(--bd2);border-radius:var(--r);color:var(--tx);
+  font-size:var(--bs);font-weight:600;font-family:'Noto Sans TC',sans-serif;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.ios-next-btn.on{display:block}
+.ios-next-btn:active{background:var(--bd)}
+.ios-hint{font-size:var(--xs);color:var(--tx2);line-height:1.7;margin-top:8px}
+.ios-hint.ok{color:var(--ok)}
+
+/* iOS done list (completed tracks) */
+.ios-done-list{display:flex;flex-direction:column;gap:8px;margin-top:var(--g)}
+.ios-done-item{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--sur);border:1px solid rgba(93,184,122,0.3);border-radius:var(--rs)}
+.ios-done-icon{font-size:16px;flex-shrink:0}
+.ios-done-name{flex:1;font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ios-done-sz{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx3)}
+
+/* Desktop: track cards with download links */
+.track-cards{display:flex;flex-direction:column;gap:8px;margin-top:var(--g)}
+.tcard{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:border-color .3s}
 .tcard.active{border-color:var(--ac)}
 .tcard.done{border-color:rgba(93,184,122,0.4)}
-.tcard-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bd)}
-.tcard-num{width:24px;height:24px;border-radius:50%;background:rgba(200,169,110,0.15);
+.tcard-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bd)}
+.tcard-num{width:22px;height:22px;border-radius:50%;background:rgba(200,169,110,0.15);
   color:var(--ac);font-size:var(--xs);font-weight:700;
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .tcard-name{flex:1;font-size:var(--sm);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tcard-sz{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx3);flex-shrink:0}
-.tcard-body{padding:10px 14px;display:flex;align-items:center;gap:10px}
+.tcard-body{padding:9px 14px;display:flex;align-items:center;gap:10px}
 .tcard-st{flex:1;font-size:var(--xs);color:var(--tx2)}
 .tcard-st.ok{color:var(--ok)}
 .tcard-st.wn{color:var(--wn)}
 .tcard-st.going{color:var(--ac)}
-.dl-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 18px;
-  background:linear-gradient(135deg,var(--ac),var(--wn));
-  border:none;border-radius:100px;color:#0f0f11;font-size:var(--xs);font-weight:700;
+.dl-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;
+  background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.28);
+  border-radius:100px;color:var(--ac);font-size:var(--xs);font-weight:600;
   text-decoration:none;cursor:pointer;flex-shrink:0;white-space:nowrap;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;font-family:'Noto Sans TC',sans-serif}
-.dl-btn:active{opacity:.8}
-.dl-btn.off{opacity:.25;pointer-events:none;background:var(--sur2);color:var(--tx2)}
+  -webkit-tap-highlight-color:transparent}
+.dl-btn:active{background:rgba(200,169,110,0.26)}
+.dl-btn.off{opacity:.25;pointer-events:none}
 
-.done-bar{display:none;background:rgba(93,184,122,0.08);border:1px solid rgba(93,184,122,0.25);
+/* Desktop: download all bar */
+.dl-all-bar{display:none;margin-top:var(--g)}
+.dl-all-bar.on{display:block}
+.dl-all-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--ac),var(--wn));
+  border:none;border-radius:var(--r);color:#0f0f11;font-size:var(--md);font-weight:700;
+  font-family:'Noto Sans TC',sans-serif;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.dl-all-btn:active{opacity:.85}
+
+.done-banner{display:none;background:rgba(93,184,122,0.08);border:1px solid rgba(93,184,122,0.25);
   border-radius:var(--rs);padding:12px 16px;font-size:var(--sm);color:var(--ok);
   text-align:center;margin-top:var(--g)}
-.done-bar.on{display:block}
+.done-banner.on{display:block}
 
 .err{background:rgba(224,133,74,0.1);border:1px solid rgba(224,133,74,0.3);
   border-radius:var(--rs);padding:12px 14px;font-size:var(--sm);color:var(--wn);
-  display:none;line-height:1.7;white-space:pre-wrap}
+  display:none;line-height:1.7}
 .err.on{display:block}
 .note{background:rgba(106,171,221,0.07);border:1px solid rgba(106,171,221,0.18);
   border-radius:var(--rs);padding:12px 14px;font-size:var(--xs);color:var(--inf);
@@ -169,7 +203,6 @@ textarea::placeholder{color:var(--tx3)}
 </header>
 
 <div class="wrap">
-
   <div class="sec">
     <div class="lbl">① 選擇音訊檔</div>
     <label class="ulabel" for="fileIn">
@@ -181,10 +214,6 @@ textarea::placeholder{color:var(--tx3)}
     <input type="file" id="fileIn"
       accept=".mp3,.m4a,.mp4,.wav,.flac,.aac,.ogg,.opus,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/flac,audio/aac,audio/ogg,audio/*">
     <div class="devbadge"><span class="dot" id="devDot"></span><span id="devTxt">偵測中…</span></div>
-  </div>
-
-  <div class="sec" id="engineSec" style="display:none">
-    <div class="lbl">處理引擎</div>
     <div class="engine-box" id="engineBox"></div>
   </div>
 
@@ -207,10 +236,7 @@ textarea::placeholder{color:var(--tx3)}
 
   <div class="sec">
     <div class="prev" id="prev">
-      <div class="prev-hdr">
-        <span>解析結果</span>
-        <span class="badge" id="tCount">0 首</span>
-      </div>
+      <div class="prev-hdr"><span>解析結果</span><span class="badge" id="tCount">0 首</span></div>
       <div class="tlist" id="tList"></div>
     </div>
   </div>
@@ -218,7 +244,7 @@ textarea::placeholder{color:var(--tx3)}
   <div class="err" id="errBox"></div>
 
   <div class="sec">
-    <div class="lbl">③ 開始切割</div>
+    <div class="lbl" id="stepLbl">③ 開始切割</div>
     <button class="gobtn" id="goBtn" disabled>▶ 開始切割</button>
   </div>
 
@@ -230,8 +256,28 @@ textarea::placeholder{color:var(--tx3)}
     <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
   </div>
 
+  <!-- iOS: current track panel -->
+  <div class="ios-current" id="iosCurrent">
+    <div class="ios-track-num" id="iosNum"></div>
+    <div class="ios-track-name" id="iosName"></div>
+    <div class="ios-track-time" id="iosTime"></div>
+    <a class="ios-dl-btn off" id="iosDlBtn" href="#" download="">⬇ 下載此曲</a>
+    <button class="ios-next-btn" id="iosNextBtn"></button>
+    <div class="ios-hint" id="iosHint">切割中，請稍候…</div>
+  </div>
+
+  <!-- iOS: completed tracks list -->
+  <div class="ios-done-list" id="iosDoneList"></div>
+
+  <!-- Desktop: track cards -->
   <div class="track-cards" id="trackCards"></div>
-  <div class="done-bar" id="doneBar"></div>
+
+  <!-- Desktop: download all -->
+  <div class="dl-all-bar" id="dlAllBar">
+    <button class="dl-all-btn" id="dlAllBtn">⬇ 一次下載全部</button>
+  </div>
+
+  <div class="done-banner" id="doneBanner"></div>
   <div class="note" id="noteBox"></div>
 </div>
 
@@ -239,145 +285,137 @@ textarea::placeholder{color:var(--tx3)}
 <script>
 'use strict';
 
-/* ══════════════════════════════════════════════════
-   MP3 FRAME PARSER — cuts MP3 by byte range
-   No decoding needed → minimal memory → iOS safe
-══════════════════════════════════════════════════ */
+/* ══════════════════════════════════════
+   MP3 Frame-level byte slicer
+   No decode needed → safe for iPhone
+══════════════════════════════════════ */
 const MP3 = (() => {
-  const BITRATES = [0,32,40,48,56,64,80,96,112,128,160,192,224,256,320];
-  const SAMPLERATES = [44100,48000,32000];
-
-  function parseFrame(buf, offset) {
-    if (offset + 4 > buf.length) return null;
-    const b0=buf[offset],b1=buf[offset+1],b2=buf[offset+2];
-    // sync word
-    if (b0 !== 0xFF || (b1 & 0xE0) !== 0xE0) return null;
-    const version = (b1 >> 3) & 0x3; // 3=MPEG1, 2=MPEG2
-    const layer = (b1 >> 1) & 0x3;   // 1=Layer3
-    if (layer !== 1) return null;     // only Layer III
-    const bitrateIdx = (b2 >> 4) & 0xF;
-    const srIdx = (b2 >> 2) & 0x3;
-    const padding = (b2 >> 1) & 0x1;
-    if (bitrateIdx === 0 || bitrateIdx === 15 || srIdx === 3) return null;
-    const bitrate = BITRATES[bitrateIdx] * 1000;
-    const sampleRate = version === 3 ? SAMPLERATES[srIdx] : SAMPLERATES[srIdx] / 2;
-    const samplesPerFrame = version === 3 ? 1152 : 576;
-    const frameSize = Math.floor(samplesPerFrame * bitrate / (8 * sampleRate)) + padding;
-    if (frameSize < 24 || frameSize > 2881) return null;
-    return { size: frameSize, sampleRate, samplesPerFrame, bitrate };
+  const BITRATES=[0,32,40,48,56,64,80,96,112,128,160,192,224,256,320];
+  const SAMPLERATES=[44100,48000,32000];
+  function parseFrame(buf,off){
+    if(off+4>buf.length)return null;
+    const b0=buf[off],b1=buf[off+1],b2=buf[off+2];
+    if(b0!==0xFF||(b1&0xE0)!==0xE0)return null;
+    const ver=(b1>>3)&3,layer=(b1>>1)&3;
+    if(layer!==1)return null;
+    const bi=(b2>>4)&0xF,sri=(b2>>2)&3,pad=(b2>>1)&1;
+    if(bi===0||bi===15||sri===3)return null;
+    const br=BITRATES[bi]*1000,sr=ver===3?SAMPLERATES[sri]:SAMPLERATES[sri]/2;
+    const spf=ver===3?1152:576;
+    const sz=Math.floor(spf*br/(8*sr))+pad;
+    if(sz<24||sz>2881)return null;
+    return{size:sz,sampleRate:sr,samplesPerFrame:spf};
   }
-
-  function findSync(buf, start) {
-    for (let i = start; i < buf.length - 3; i++) {
-      if (buf[i] === 0xFF && (buf[i+1] & 0xE0) === 0xE0) {
-        const f = parseFrame(buf, i);
-        if (f) return i;
-      }
-    }
+  function findSync(buf,start){
+    for(let i=start;i<buf.length-3;i++)
+      if(buf[i]===0xFF&&(buf[i+1]&0xE0)===0xE0&&parseFrame(buf,i))return i;
     return -1;
   }
-
-  // Returns array of {offset, size, duration} for each frame
-  function indexFrames(uint8) {
-    const frames = [];
-    let pos = 0;
-    // skip ID3 tag
-    if (uint8[0]===0x49&&uint8[1]===0x44&&uint8[2]===0x33) {
-      const id3size = ((uint8[6]&0x7F)<<21)|((uint8[7]&0x7F)<<14)|((uint8[8]&0x7F)<<7)|(uint8[9]&0x7F);
-      pos = 10 + id3size;
+  function indexFrames(u8){
+    const frames=[];let pos=0;
+    if(u8[0]===0x49&&u8[1]===0x44&&u8[2]===0x33){
+      const sz=((u8[6]&0x7F)<<21)|((u8[7]&0x7F)<<14)|((u8[8]&0x7F)<<7)|(u8[9]&0x7F);
+      pos=10+sz;
     }
-    pos = findSync(uint8, pos);
-    if (pos < 0) return frames;
-
-    let totalSamples = 0;
-    while (pos < uint8.length - 3) {
-      const f = parseFrame(uint8, pos);
-      if (!f) { pos = findSync(uint8, pos+1); if(pos<0) break; continue; }
-      frames.push({ offset: pos, size: f.size, samples: f.samplesPerFrame,
-                    sampleRate: f.sampleRate, startSample: totalSamples });
-      totalSamples += f.samplesPerFrame;
-      pos += f.size;
+    pos=findSync(u8,pos);if(pos<0)return frames;
+    let tot=0;
+    while(pos<u8.length-3){
+      const f=parseFrame(u8,pos);
+      if(!f){pos=findSync(u8,pos+1);if(pos<0)break;continue;}
+      frames.push({offset:pos,size:f.size,samples:f.samplesPerFrame,sampleRate:f.sampleRate,startSample:tot});
+      tot+=f.samplesPerFrame;pos+=f.size;
     }
     return frames;
   }
-
-  // Slice MP3 bytes by time (seconds)
-  function slice(uint8, frames, startSec, endSec) {
-    if (!frames.length) return null;
-    const sr = frames[0].sampleRate;
-    const startSample = Math.floor(startSec * sr);
-    const endSample = endSec != null ? Math.floor(endSec * sr) : Infinity;
-
-    let startIdx = 0, endIdx = frames.length;
-    for (let i = 0; i < frames.length; i++) {
-      if (frames[i].startSample <= startSample) startIdx = i;
-      if (frames[i].startSample >= endSample && endIdx === frames.length) { endIdx = i; break; }
+  function slice(u8,frames,startSec,endSec){
+    if(!frames.length)return null;
+    const sr=frames[0].sampleRate;
+    const s0=Math.floor(startSec*sr),s1=endSec!=null?Math.floor(endSec*sr):Infinity;
+    let si=0,ei=frames.length;
+    for(let i=0;i<frames.length;i++){
+      if(frames[i].startSample<=s0)si=i;
+      if(frames[i].startSample>=s1&&ei===frames.length){ei=i;break;}
     }
-
-    // Calculate total bytes
-    let totalBytes = 0;
-    for (let i = startIdx; i < endIdx; i++) totalBytes += frames[i].size;
-    if (totalBytes === 0) return null;
-
-    const out = new Uint8Array(totalBytes);
-    let pos = 0;
-    for (let i = startIdx; i < endIdx; i++) {
-      out.set(uint8.subarray(frames[i].offset, frames[i].offset + frames[i].size), pos);
-      pos += frames[i].size;
-    }
-    return new Blob([out], { type: 'audio/mpeg' });
+    let bytes=0;for(let i=si;i<ei;i++)bytes+=frames[i].size;
+    if(!bytes)return null;
+    const out=new Uint8Array(bytes);let p=0;
+    for(let i=si;i<ei;i++){out.set(u8.subarray(frames[i].offset,frames[i].offset+frames[i].size),p);p+=frames[i].size;}
+    return new Blob([out],{type:'audio/mpeg'});
   }
-
-  return { indexFrames, slice };
+  function duration(frames){
+    if(!frames.length)return 0;
+    const last=frames[frames.length-1];
+    return(last.startSample+last.samples)/frames[0].sampleRate;
+  }
+  return{indexFrames,slice,duration};
 })();
 
-/* ══════════════════════════════
-   WAV encoder (fallback for non-MP3)
-══════════════════════════════ */
-function encodeWAV(samples, sr, ch) {
-  const buf = new ArrayBuffer(44 + samples.length * 2);
-  const v = new DataView(buf);
+/* ══════════════ WAV encoder ══════════════ */
+function encodeWAV(samples,sr,ch){
+  const buf=new ArrayBuffer(44+samples.length*2),v=new DataView(buf);
   const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
   ws(0,'RIFF');v.setUint32(4,36+samples.length*2,true);ws(8,'WAVE');
   ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);
-  v.setUint32(24,sr,true);v.setUint32(28,sr*ch*2,true);
-  v.setUint16(32,ch*2,true);v.setUint16(34,16,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*ch*2,true);v.setUint16(32,ch*2,true);v.setUint16(34,16,true);
   ws(36,'data');v.setUint32(40,samples.length*2,true);
-  let o=44;
-  for(let i=0;i<samples.length;i++,o+=2){
-    const s=Math.max(-1,Math.min(1,samples[i]));
-    v.setInt16(o,s<0?s*0x8000:s*0x7FFF,true);
-  }
+  let o=44;for(let i=0;i<samples.length;i++,o+=2){const s=Math.max(-1,Math.min(1,samples[i]));v.setInt16(o,s<0?s*0x8000:s*0x7FFF,true);}
   return new Blob([buf],{type:'audio/wav'});
 }
 
-/* ══════════════════════════════
-   MP3 encoder via lamejs (for WAV/M4A→MP3)
-══════════════════════════════ */
-function encodeMP3(left, right, sr) {
-  const ch = right ? 2 : 1;
-  const enc = new lamejs.Mp3Encoder(ch, sr, 128);
-  const blockSize = 1152;
-  const toI16 = f => { const a=new Int16Array(f.length); for(let i=0;i<f.length;i++) a[i]=Math.max(-32768,Math.min(32767,f[i]*32767)); return a; };
-  const L = toI16(left), R = right ? toI16(right) : null;
-  const chunks = [];
-  for (let i=0; i<L.length; i+=blockSize) {
-    const b = R ? enc.encodeBuffer(L.subarray(i,i+blockSize), R.subarray(i,i+blockSize))
-                : enc.encodeBuffer(L.subarray(i,i+blockSize));
-    if (b.length > 0) chunks.push(new Uint8Array(b));
+/* ══════════════ MP3 encoder (lamejs) ══════════════ */
+function encodeMP3(L,R,sr){
+  const ch=R?2:1,enc=new lamejs.Mp3Encoder(ch,sr,128);
+  const toI16=f=>{const a=new Int16Array(f.length);for(let i=0;i<f.length;i++)a[i]=Math.max(-32768,Math.min(32767,f[i]*32767));return a;};
+  const l=toI16(L),r=R?toI16(R):null;
+  const chunks=[],bs=1152;
+  for(let i=0;i<l.length;i+=bs){
+    const b=r?enc.encodeBuffer(l.subarray(i,i+bs),r.subarray(i,i+bs)):enc.encodeBuffer(l.subarray(i,i+bs));
+    if(b.length)chunks.push(new Uint8Array(b));
   }
-  const e = enc.flush();
-  if (e.length > 0) chunks.push(new Uint8Array(e));
-  return new Blob(chunks, {type:'audio/mpeg'});
+  const e=enc.flush();if(e.length)chunks.push(new Uint8Array(e));
+  return new Blob(chunks,{type:'audio/mpeg'});
 }
 
-/* ══════════════════════════════
-   Helpers
-══════════════════════════════ */
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-const $ = id => document.getElementById(id);
-let audioFile=null, parsedTracks=[], fileBytes=null, mp3Frames=null, fileDuration=0;
+/* ══════════════ State ══════════════ */
+const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isDesktop=!isIOS&&!/Android/i.test(navigator.userAgent);
+const $=id=>document.getElementById(id);
+let audioFile=null,parsedTracks=[],fileBytes=null,mp3Frames=null;
+let desktopBlobs=[]; // desktop: store all blobs for batch download
+let iosCurrentBlob=null,iosCurrentFilename='';
+let iosCurrentIdx=0,iosReadyForNext=false;
 
+/* ══════════════ Device init ══════════════ */
+(function initDevice(){
+  const dot=$('devDot'),txt=$('devTxt');
+  if(isIOS){
+    dot.style.background='var(--inf)';txt.textContent='iPhone / iPad';
+    $('noteBox').innerHTML='📱 <strong>iPhone 儲存：</strong>點「⬇ 下載此曲」→ Safari 新分頁開啟 → 點底部<strong>分享</strong>鈕 → <strong>儲存至檔案</strong><br>下載後點「下一首」繼續切割，記憶體會自動釋放。';
+  } else if(isDesktop){
+    dot.style.background='var(--ok)';txt.textContent='電腦';
+    $('noteBox').innerHTML='💻 <strong>電腦模式：</strong>全部切割完成後，點「⬇ 一次下載全部」自動批次下載所有曲目。';
+  } else {
+    dot.style.background='var(--ok)';txt.textContent='Android';
+    $('noteBox').innerHTML='🤖 <strong>Android：</strong>切割完成後點各曲目「⬇ 下載」儲存。';
+  }
+})();
+
+function isMp3(f){return/\.mp3$/i.test(f.name)||f.type==='audio/mpeg';}
+
+function showEngine(isMP3){
+  const box=$('engineBox');box.classList.add('on');
+  if(isMP3){
+    box.innerHTML=`<div style="font-weight:600;color:var(--tx);margin-bottom:4px">✅ MP3 直切模式</div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span>不解碼，直接切 frame，記憶體極低，iPhone 最佳</div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span>輸出 MP3，品質與原始相同</div>`;
+  } else {
+    box.innerHTML=`<div style="font-weight:600;color:var(--tx);margin-bottom:4px">⚠️ 解碼模式（非 MP3）</div>
+    <div class="engine-row"><span class="dot" style="background:var(--wn)"></span>需解碼後再編碼，iPhone 建議 30MB 以下</div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span>輸出 MP3</div>`;
+  }
+}
+
+/* ══════════════ Helpers ══════════════ */
 function showErr(msg){const e=$('errBox');e.textContent=msg;e.className='err'+(msg?' on':'');}
 function toSec(s){s=s.trim().replace(/^\[|\]$/g,'');const p=s.split(':').map(Number);return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];}
 function parseTracks(raw){
@@ -392,12 +430,12 @@ function updatePreview(){
   if(!parsedTracks.length){prev.classList.remove('on');check();return;}
   prev.classList.add('on');
   $('tCount').textContent=parsedTracks.length+' 首';
-  const tList=$('tList');tList.innerHTML='';
+  const tl=$('tList');tl.innerHTML='';
   parsedTracks.forEach((t,i)=>{
     const nx=parsedTracks[i+1];
     const row=document.createElement('div');row.className='trow';
     row.innerHTML=`<div class="tnum">${i+1}</div><div class="tname">${t.name}</div><div class="ttime">${t.ts}→${nx?nx.ts:'結尾'}</div>`;
-    tList.appendChild(row);
+    tl.appendChild(row);
   });
   check();
 }
@@ -408,195 +446,194 @@ function setProg(pct,lbl){
 }
 function sanitize(n){return n.replace(/[\/\\:*?"<>|]/g,'_').substring(0,80);}
 
-function isMp3(file){return /\.mp3$/i.test(file.name)||file.type==='audio/mpeg';}
-
-/* ══════════════════════════════
-   Device / engine setup
-══════════════════════════════ */
-function initDevice(){
-  const dot=$('devDot'),txt=$('devTxt');
-  if(isIOS){dot.style.background='var(--inf)';txt.textContent='iPhone / iPad 已偵測';}
-  else{dot.style.background='var(--ok)';txt.textContent='電腦 / Android 已偵測';}
-
-  $('noteBox').innerHTML = isIOS
-    ? '📱 <strong>iPhone 儲存：</strong>點「⬇ 下載」→ Safari 開新分頁 → 點底部<strong>分享</strong>鈕 → <strong>儲存至檔案</strong>'
-    : '💻 <strong>電腦：</strong>點「⬇ 下載」直接存檔。';
-}
-initDevice();
-
-function showEngineInfo(isMP3file){
-  const sec=$('engineSec'),box=$('engineBox');
-  sec.style.display='block';
-  if(isMP3file){
-    box.innerHTML=`<div class="engine-title">✅ MP3 直接切割模式（iPhone 最佳）</div>
-    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>不解碼音訊，直接按 frame 切割位元組，<b>記憶體佔用極低</b>，不會 crash</div></div>
-    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>輸出 <b>MP3</b>，品質與原始相同</div></div>`;
-  } else {
-    box.innerHTML=`<div class="engine-title">⚠️ 解碼再編碼模式（非 MP3 格式）</div>
-    <div class="engine-row"><span class="dot" style="background:var(--wn)"></span><div>需要解碼音訊（M4A/WAV），<b>逐首處理</b>降低記憶體</div></div>
-    <div class="engine-row"><span class="dot" style="background:var(--inf)"></span><div>iPhone 建議檔案 <b>30MB 以下</b>，較大檔案可能較慢</div></div>
-    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>輸出 <b>MP3</b>（lamejs 編碼）或 <b>WAV</b></div></div>`;
-  }
-}
-
-/* ══════════════════════════════
-   File input
-══════════════════════════════ */
-$('fileIn').addEventListener('change', async e => {
-  const f = e.target.files && e.target.files[0];
-  if (!f) return;
-  audioFile = f;
-  fileBytes = null; mp3Frames = null;
-  $('fname').textContent = '✓ ' + f.name + ' (' + (f.size/1024/1024).toFixed(1) + ' MB)';
-  $('fname').classList.add('on');
-  showEngineInfo(isMp3(f));
-  check();
-});
-$('tsIn').addEventListener('input', updatePreview);
-
-/* ══════════════════════════════
-   Make a track card
-══════════════════════════════ */
-function makeCard(t, i){
-  const card=document.createElement('div');
-  card.className='tcard';card.id='card'+i;
-  card.innerHTML=`
-    <div class="tcard-hdr">
-      <div class="tcard-num">${i+1}</div>
-      <div class="tcard-name">${t.name}</div>
-      <div class="tcard-sz" id="sz${i}"></div>
-    </div>
-    <div class="tcard-body">
-      <div class="tcard-st" id="st${i}">⏸ 等待中</div>
-      <a class="dl-btn off" id="dl${i}" href="#" download="">⬇ 下載</a>
-    </div>`;
+/* ══════════════ Desktop card helpers ══════════════ */
+function makeCard(t,i){
+  const card=document.createElement('div');card.className='tcard';card.id='card'+i;
+  card.innerHTML=`<div class="tcard-hdr"><div class="tcard-num">${i+1}</div><div class="tcard-name">${t.name}</div><div class="tcard-sz" id="sz${i}"></div></div>
+  <div class="tcard-body"><div class="tcard-st" id="st${i}">⏸ 等待中</div><a class="dl-btn off" id="dl${i}" href="#" download="">⬇ 下載</a></div>`;
   $('trackCards').appendChild(card);
 }
-
-function activateCard(i, msg){
-  const card=$('card'+i);
-  if(card){card.classList.add('active');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
-  const st=$('st'+i);if(st){st.className='tcard-st going';st.textContent=msg||'⏳ 切割中…';}
+function activateCard(i){
+  const c=$('card'+i);if(c){c.classList.add('active');c.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  const s=$('st'+i);if(s){s.className='tcard-st going';s.textContent='⏳ 切割中…';}
 }
-function doneCard(i, blob, filename){
-  const card=$('card'+i);
-  if(card){card.classList.remove('active');card.classList.add('done');}
-  const st=$('st'+i);if(st){st.className='tcard-st ok';st.textContent='✅ 完成';}
+function doneCard(i,blob,filename){
+  const c=$('card'+i);if(c){c.classList.remove('active');c.classList.add('done');}
+  const s=$('st'+i);if(s){s.className='tcard-st ok';s.textContent='✅ 完成';}
   const sz=$('sz'+i);if(sz)sz.textContent=(blob.size/1024/1024).toFixed(1)+' MB';
   const dl=$('dl'+i);
-  if(dl){
-    const url=URL.createObjectURL(blob);
-    dl.href=url;dl.download=filename;dl.classList.remove('off');
-    dl.addEventListener('click',ev=>{
-      if(isIOS){ev.preventDefault();window.open(url,'_blank');}
-    });
+  if(dl){const url=URL.createObjectURL(blob);dl.href=url;dl.download=filename;dl.classList.remove('off');}
+}
+function failCard(i,msg){const s=$('st'+i);if(s){s.className='tcard-st wn';s.textContent='❌ '+msg;}}
+
+/* ══════════════ iOS panel helpers ══════════════ */
+function setupIosPanel(t,i,total,blob,filename){
+  const nx=parsedTracks[i+1];
+  const isLast=i===total-1;
+
+  // Revoke previous blob URL to free memory
+  const prevBtn=$('iosDlBtn');
+  if(prevBtn.href&&prevBtn.href!=='#')URL.revokeObjectURL(prevBtn.href);
+
+  $('iosNum').textContent=`第 ${i+1} 首 / 共 ${total} 首`;
+  $('iosName').textContent=t.name;
+  $('iosTime').textContent=t.ts + ' → ' + (nx?nx.ts:'結尾');
+  $('iosCurrent').classList.add('on');
+
+  const url=URL.createObjectURL(blob);
+  prevBtn.href=url;
+  prevBtn.download=filename;
+  prevBtn.className='ios-dl-btn';
+  prevBtn.onclick=ev=>{ev.preventDefault();window.open(url,'_blank');};
+
+  const nextBtn=$('iosNextBtn');
+  nextBtn.textContent=isLast?'✅ 全部完成':'切割下一首 →';
+  nextBtn.className='ios-next-btn on';
+  nextBtn.onclick=null; // will be set by caller
+
+  $('iosHint').className='ios-hint ok';
+  $('iosHint').textContent=isLast
+    ?'這是最後一首，下載後即完成！'
+    :'下載後點「切割下一首」，記憶體會自動釋放';
+
+  // Add to done list
+  const doneList=$('iosDoneList');
+  const item=document.createElement('div');item.className='ios-done-item';
+  item.innerHTML=`<span class="ios-done-icon">✅</span><span class="ios-done-name">${i+1}. ${t.name}</span><span class="ios-done-sz">${(blob.size/1024/1024).toFixed(1)} MB</span>`;
+  doneList.appendChild(item);
+}
+
+/* ══════════════ Core: cut one track ══════════════ */
+async function cutTrack(i){
+  const t=parsedTracks[i],nx=parsedTracks[i+1];
+  const num=String(i+1).padStart(2,'0');
+  const filename=`${num}_${sanitize(t.name)}.mp3`;
+
+  if(mp3Frames){
+    // MP3 byte-slice — instant, no decode
+    const blob=MP3.slice(fileBytes,mp3Frames,t.sec,nx?nx.sec:null);
+    if(!blob)throw new Error('切割失敗');
+    return{blob,filename};
+  } else {
+    // Non-MP3: decode → encode MP3
+    const AC=window.AudioContext||window.webkitAudioContext;
+    const ctx=new AC();
+    const copy=fileBytes.buffer.slice(0);
+    let decoded;
+    try{decoded=await ctx.decodeAudioData(copy);}
+    catch(e){await ctx.close();throw new Error('解碼失敗');}
+    const sr=decoded.sampleRate,ch=decoded.numberOfChannels,dur=decoded.duration;
+    const endSec=nx?Math.min(nx.sec,dur):dur;
+    const s0=Math.floor(t.sec*sr),s1=Math.min(Math.floor(endSec*sr),decoded.getChannelData(0).length);
+    const L=decoded.getChannelData(0).slice(s0,s1);
+    const R=ch>1?decoded.getChannelData(1).slice(s0,s1):null;
+    await ctx.close();
+    const blob=encodeMP3(L,R,sr);
+    return{blob,filename};
   }
 }
-function failCard(i, msg){
-  const st=$('st'+i);if(st){st.className='tcard-st wn';st.textContent='❌ '+msg;}
-}
 
-/* ══════════════════════════════
-   Main split logic
-══════════════════════════════ */
-$('goBtn').addEventListener('click', async () => {
+/* ══════════════ Main ══════════════ */
+$('fileIn').addEventListener('change',async e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  audioFile=f;fileBytes=null;mp3Frames=null;
+  $('fname').textContent='✓ '+f.name+' ('+(f.size/1024/1024).toFixed(1)+' MB)';
+  $('fname').classList.add('on');
+  showEngine(isMp3(f));
+  check();
+});
+$('tsIn').addEventListener('input',updatePreview);
+
+$('goBtn').addEventListener('click',async()=>{
   showErr('');
-  $('trackCards').innerHTML='';
-  $('doneBar').classList.remove('on');
+  $('trackCards').innerHTML='';$('iosDoneList').innerHTML='';
+  $('iosCurrent').classList.remove('on');
+  $('dlAllBar').classList.remove('on');$('doneBanner').classList.remove('on');
   $('prog').classList.add('on');
-  $('goBtn').disabled=true;
-  $('goBtn').innerHTML='<span class="spin">⏳</span> 處理中…';
+  $('goBtn').disabled=true;$('goBtn').innerHTML='<span class="spin">⏳</span> 處理中…';
+  desktopBlobs=[];iosCurrentIdx=0;
 
-  try {
+  try{
     setProg(3,'讀取檔案…');
-    const ab = await audioFile.arrayBuffer();
-    fileBytes = new Uint8Array(ab);
-    const total = parsedTracks.length;
+    const ab=await audioFile.arrayBuffer();
+    fileBytes=new Uint8Array(ab);
+    if(isMp3(audioFile)){
+      setProg(10,'分析 MP3 結構…');
+      mp3Frames=MP3.indexFrames(fileBytes);
+      if(!mp3Frames.length)throw new Error('無法解析 MP3，請確認檔案完整');
+    }else{mp3Frames=null;}
 
-    // Build all cards first
-    parsedTracks.forEach((t,i)=>makeCard(t,i));
+    const total=parsedTracks.length;
 
-    /* ── PATH A: MP3 frame-level cut (no decode, iOS safe) ── */
-    if (isMp3(audioFile)) {
-      setProg(15,'分析 MP3 結構…');
-      mp3Frames = MP3.indexFrames(fileBytes);
-      if (!mp3Frames.length) throw new Error('無法解析 MP3 結構，請確認檔案完整');
-      const sr = mp3Frames[0].sampleRate;
-      const totalSamples = mp3Frames[mp3Frames.length-1].startSample + mp3Frames[mp3Frames.length-1].samples;
-      fileDuration = totalSamples / sr;
-
-      for (let i=0; i<total; i++) {
-        const t=parsedTracks[i], nx=parsedTracks[i+1];
-        const num=String(i+1).padStart(2,'0');
-        const filename=`${num}_${sanitize(t.name)}.mp3`;
-        activateCard(i,'⏳ 切割中…');
-        setProg(15+Math.round((i/total)*83),`切割 ${i+1}/${total}：${t.name}`);
-        await new Promise(r=>setTimeout(r,10));
-        const blob = MP3.slice(fileBytes, mp3Frames, t.sec, nx?nx.sec:null);
-        if (!blob){ failCard(i,'切割失敗'); continue; }
-        doneCard(i, blob, filename);
-      }
-
-    /* ── PATH B: Non-MP3 → decode one track at a time → encode MP3 ── */
-    } else {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) throw new Error('此裝置不支援 Web Audio API');
-
-      for (let i=0; i<total; i++) {
-        const t=parsedTracks[i], nx=parsedTracks[i+1];
-        const num=String(i+1).padStart(2,'0');
-        const filename=`${num}_${sanitize(t.name)}.mp3`;
-        activateCard(i,'⏳ 解碼中…');
-        setProg(5+Math.round((i/total)*90),`處理 ${i+1}/${total}：${t.name}`);
-
-        // Fresh context + fresh copy of buffer each track to allow GC
-        const ctx = new AC();
-        let decoded;
-        try {
-          // Use a fresh copy so previous decoded data can be GC'd
-          const copy = fileBytes.buffer.slice(0);
-          decoded = await ctx.decodeAudioData(copy);
-        } catch(e) {
-          await ctx.close();
-          failCard(i,'解碼失敗：'+e.message);
-          continue;
+    /* ── iOS: one at a time ── */
+    if(isIOS){
+      const processNext=async(idx)=>{
+        if(idx>=total){
+          setProg(100,'🎉 全部完成！');
+          $('iosCurrent').classList.remove('on');
+          $('doneBanner').className='done-banner on';
+          $('doneBanner').textContent='🎉 全部 '+total+' 首切割完成！';
+          $('goBtn').disabled=false;$('goBtn').innerHTML='▶ 重新切割';check();
+          return;
         }
+        const t=parsedTracks[idx];
+        const pct=Math.round((idx/total)*95)+3;
+        setProg(pct,`切割 ${idx+1}/${total}：${t.name}`);
+        $('iosHint').className='ios-hint';$('iosHint').textContent='切割中，請稍候…';
+        $('iosDlBtn').className='ios-dl-btn off';
+        $('iosNextBtn').className='ios-next-btn';
+        if(idx===0)$('iosCurrent').classList.add('on');
+        $('iosNum').textContent=`第 ${idx+1} 首 / 共 ${total} 首`;
+        $('iosName').textContent=t.name;
 
-        const sr=decoded.sampleRate, ch=decoded.numberOfChannels;
-        const dur=decoded.duration;
-        const endSec=nx?Math.min(nx.sec,dur):dur;
-        const s0=Math.floor(t.sec*sr);
-        const s1=Math.min(Math.floor(endSec*sr), decoded.getChannelData(0).length);
-        const left=decoded.getChannelData(0).slice(s0,s1);
-        const right=ch>1?decoded.getChannelData(1).slice(s0,s1):null;
-        await ctx.close();
-        decoded=null; // hint GC
+        let result;
+        try{result=await cutTrack(idx);}
+        catch(e){showErr('❌ '+e.message);$('goBtn').disabled=false;$('goBtn').innerHTML='▶ 重新切割';check();return;}
 
-        activateCard(i,'⏳ 編碼 MP3…');
+        setupIosPanel(t,idx,total,result.blob,result.filename);
+
+        // Wait for user to tap "next"
+        $('iosNextBtn').onclick=()=>processNext(idx+1);
+      };
+      await processNext(0);
+      // goBtn re-enabled inside processNext when done
+
+    /* ── Desktop / Android: process all, then batch download ── */
+    } else {
+      parsedTracks.forEach((t,i)=>makeCard(t,i));
+      for(let i=0;i<total;i++){
+        activateCard(i);
+        setProg(5+Math.round((i/total)*90),`切割 ${i+1}/${total}：${parsedTracks[i].name}`);
+        let result;
+        try{result=await cutTrack(i);}
+        catch(e){failCard(i,e.message);continue;}
+        doneCard(i,result.blob,result.filename);
+        desktopBlobs.push(result);
         await new Promise(r=>setTimeout(r,20));
-        let blob;
-        try { blob=encodeMP3(left,right,sr); }
-        catch(e){ failCard(i,'MP3 編碼失敗'); continue; }
-
-        doneCard(i,blob,filename);
-        await new Promise(r=>setTimeout(r,50));
       }
+      setProg(100,'🎉 全部完成！');
+      $('doneBanner').className='done-banner on';
+      $('doneBanner').textContent='🎉 全部 '+total+' 首完成！';
+      if(isDesktop&&desktopBlobs.length){$('dlAllBar').classList.add('on');}
+      $('goBtn').disabled=false;$('goBtn').innerHTML='▶ 重新切割';check();
     }
 
-    setProg(100,'🎉 全部完成！');
-    $('doneBar').className='done-bar on';
-    $('doneBar').textContent = isIOS
-      ? '🎉 完成！點各曲目「⬇ 下載」→ Safari 新分頁 → 分享 → 儲存至檔案'
-      : '🎉 全部切割完成！點各曲目「⬇ 下載」儲存';
-
-  } catch(err) {
+  }catch(err){
     showErr('❌ 錯誤：'+err.message);
     $('prog').classList.remove('on');
+    $('goBtn').disabled=false;$('goBtn').innerHTML='▶ 重新切割';check();
   }
+});
 
-  $('goBtn').disabled=false;
-  $('goBtn').innerHTML='▶ 重新切割';
-  check();
+/* ── Desktop: download all ── */
+$('dlAllBtn').addEventListener('click',()=>{
+  desktopBlobs.forEach(({blob,filename},i)=>{
+    setTimeout(()=>{
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);a.download=filename;
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+    },i*700);
+  });
 });
 </script>
 </body>
