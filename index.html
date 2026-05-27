@@ -27,7 +27,6 @@ html{background:var(--bg);-webkit-text-size-adjust:100%}
 body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--tx);
   min-height:100dvh;line-height:1.6;font-size:var(--bs);
   padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
-
 .hdr{background:var(--sur);border-bottom:1px solid var(--bd);
   padding:clamp(12px,3.5vw,20px) var(--p);
   padding-top:calc(clamp(12px,3.5vw,20px) + env(safe-area-inset-top,0px));
@@ -38,11 +37,9 @@ body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:
   font-size:clamp(20px,5vw,26px);flex-shrink:0}
 .htitle{font-size:var(--lg);font-weight:700;letter-spacing:-.02em}
 .hsub{font-size:var(--xs);color:var(--tx2);margin-top:1px}
-
 .wrap{max-width:660px;margin:0 auto;padding:var(--p)}
 .sec{margin-bottom:var(--g)}
-.lbl{font-size:var(--xs);font-weight:700;color:var(--ac);
-  letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.lbl{font-size:var(--xs);font-weight:700;color:var(--ac);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 
 /* Upload */
 .ulabel{display:block;border:1.5px dashed var(--bd2);border-radius:var(--r);
@@ -56,21 +53,10 @@ body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:
 .ufn{margin-top:12px;font-size:var(--sm);font-weight:500;color:var(--ok);word-break:break-all;display:none}
 .ufn.on{display:block}
 #fileIn{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-
-/* Device badge */
 .devbadge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;
   font-size:var(--xs);background:var(--sur2);border:1px solid var(--bd);
   border-radius:100px;padding:4px 12px;color:var(--tx2)}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--ok)}
-
-/* Format toggle */
-.fmt-row{display:flex;gap:8px;margin-top:6px}
-.fmt-btn{flex:1;padding:9px;background:var(--sur2);border:1px solid var(--bd);
-  border-radius:var(--rs);color:var(--tx2);font-size:var(--sm);font-weight:500;
-  font-family:'Noto Sans TC',sans-serif;cursor:pointer;text-align:center;
-  -webkit-tap-highlight-color:transparent;transition:all .2s}
-.fmt-btn.sel{background:rgba(200,169,110,0.12);border-color:var(--ac);color:var(--ac)}
-.fmt-btn:disabled{opacity:.35;cursor:not-allowed}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
 textarea{width:100%;min-height:clamp(110px,28vw,150px);background:var(--sur);
   border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);
@@ -98,6 +84,16 @@ textarea::placeholder{color:var(--tx3)}
 .tname{font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ttime{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx2);white-space:nowrap}
 
+/* Engine info box */
+.engine-box{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);
+  padding:12px 14px;font-size:var(--sm)}
+.engine-title{font-weight:600;margin-bottom:6px;color:var(--tx)}
+.engine-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:var(--xs);color:var(--tx2);
+  border-bottom:1px solid var(--bd)}
+.engine-row:last-child{border-bottom:none}
+.engine-row .dot{margin-top:3px;flex-shrink:0}
+.engine-row b{color:var(--tx);font-weight:600}
+
 /* Go button */
 .gobtn{width:100%;padding:clamp(14px,4.2vw,19px);
   background:linear-gradient(135deg,var(--ac),var(--wn));
@@ -119,9 +115,12 @@ textarea::placeholder{color:var(--tx3)}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--wn));
   border-radius:100px;transition:width .35s ease;width:0%}
 
-/* Track results — one card per track */
+/* Track cards */
 .track-cards{display:flex;flex-direction:column;gap:10px;margin-top:var(--g)}
-.tcard{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.tcard{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;
+  transition:border-color .3s}
+.tcard.active{border-color:var(--ac)}
+.tcard.done{border-color:rgba(93,184,122,0.4)}
 .tcard-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bd)}
 .tcard-num{width:24px;height:24px;border-radius:50%;background:rgba(200,169,110,0.15);
   color:var(--ac);font-size:var(--xs);font-weight:700;
@@ -129,17 +128,17 @@ textarea::placeholder{color:var(--tx3)}
 .tcard-name{flex:1;font-size:var(--sm);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tcard-sz{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx3);flex-shrink:0}
 .tcard-body{padding:10px 14px;display:flex;align-items:center;gap:10px}
-.tcard-status{flex:1;font-size:var(--xs);color:var(--tx2)}
-.tcard-status.ok{color:var(--ok)}
-.tcard-status.wn{color:var(--wn)}
-.tcard-status.going{color:var(--ac)}
-.dl-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;
+.tcard-st{flex:1;font-size:var(--xs);color:var(--tx2)}
+.tcard-st.ok{color:var(--ok)}
+.tcard-st.wn{color:var(--wn)}
+.tcard-st.going{color:var(--ac)}
+.dl-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 18px;
   background:linear-gradient(135deg,var(--ac),var(--wn));
   border:none;border-radius:100px;color:#0f0f11;font-size:var(--xs);font-weight:700;
   text-decoration:none;cursor:pointer;flex-shrink:0;white-space:nowrap;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;font-family:'Noto Sans TC',sans-serif}
 .dl-btn:active{opacity:.8}
-.dl-btn.disabled{opacity:.3;pointer-events:none}
+.dl-btn.off{opacity:.25;pointer-events:none;background:var(--sur2);color:var(--tx2)}
 
 .done-bar{display:none;background:rgba(93,184,122,0.08);border:1px solid rgba(93,184,122,0.25);
   border-radius:var(--rs);padding:12px 16px;font-size:var(--sm);color:var(--ok);
@@ -150,7 +149,6 @@ textarea::placeholder{color:var(--tx3)}
   border-radius:var(--rs);padding:12px 14px;font-size:var(--sm);color:var(--wn);
   display:none;line-height:1.7;white-space:pre-wrap}
 .err.on{display:block}
-
 .note{background:rgba(106,171,221,0.07);border:1px solid rgba(106,171,221,0.18);
   border-radius:var(--rs);padding:12px 14px;font-size:var(--xs);color:var(--inf);
   line-height:1.85;margin-top:var(--g)}
@@ -162,7 +160,6 @@ textarea::placeholder{color:var(--tx3)}
 </style>
 </head>
 <body>
-
 <header class="hdr">
   <div class="hico">✂</div>
   <div>
@@ -173,36 +170,26 @@ textarea::placeholder{color:var(--tx3)}
 
 <div class="wrap">
 
-  <!-- Step 1 -->
   <div class="sec">
     <div class="lbl">① 選擇音訊檔</div>
     <label class="ulabel" for="fileIn">
       <span class="uico">🎵</span>
       <div class="ut">點此選擇音訊檔案</div>
-      <div class="uh">MP3 · M4A · WAV · AAC · FLAC</div>
+      <div class="uh">MP3 · M4A · WAV · AAC</div>
       <div class="ufn" id="fname"></div>
     </label>
     <input type="file" id="fileIn"
       accept=".mp3,.m4a,.mp4,.wav,.flac,.aac,.ogg,.opus,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/flac,audio/aac,audio/ogg,audio/*">
-    <div class="devbadge" id="devBadge">
-      <span class="dot" id="devDot"></span>
-      <span id="devTxt">偵測裝置中…</span>
-    </div>
+    <div class="devbadge"><span class="dot" id="devDot"></span><span id="devTxt">偵測中…</span></div>
   </div>
 
-  <!-- Step 2: Format -->
-  <div class="sec" id="fmtSec">
-    <div class="lbl">② 輸出格式</div>
-    <div class="fmt-row">
-      <button class="fmt-btn sel" id="btnMP3" onclick="setFmt('mp3')">🎵 MP3<br><span style="font-size:var(--xs);opacity:.7">檔案小・所有裝置</span></button>
-      <button class="fmt-btn" id="btnWAV" onclick="setFmt('wav')">🔊 WAV<br><span style="font-size:var(--xs);opacity:.7">無損・檔案較大</span></button>
-    </div>
-    <div style="font-size:var(--xs);color:var(--tx2);margin-top:6px" id="fmtHint"></div>
+  <div class="sec" id="engineSec" style="display:none">
+    <div class="lbl">處理引擎</div>
+    <div class="engine-box" id="engineBox"></div>
   </div>
 
-  <!-- Step 3 -->
   <div class="sec">
-    <div class="lbl">③ 貼上時間軸</div>
+    <div class="lbl">② 貼上時間軸</div>
     <textarea id="tsIn" placeholder="每行一首，例如：
 00:00 醉夢人
 03:33 雨季唱片
@@ -218,7 +205,6 @@ textarea::placeholder{color:var(--tx3)}
     </div>
   </div>
 
-  <!-- Preview -->
   <div class="sec">
     <div class="prev" id="prev">
       <div class="prev-hdr">
@@ -231,13 +217,11 @@ textarea::placeholder{color:var(--tx3)}
 
   <div class="err" id="errBox"></div>
 
-  <!-- Step 4 -->
   <div class="sec">
-    <div class="lbl">④ 開始切割</div>
+    <div class="lbl">③ 開始切割</div>
     <button class="gobtn" id="goBtn" disabled>▶ 開始切割</button>
   </div>
 
-  <!-- Progress -->
   <div class="prog" id="prog">
     <div class="prog-hdr">
       <span class="prog-lbl" id="progLbl">處理中…</span>
@@ -246,82 +230,113 @@ textarea::placeholder{color:var(--tx3)}
     <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
   </div>
 
-  <!-- Track cards (appear one by one) -->
   <div class="track-cards" id="trackCards"></div>
-  <div class="done-bar" id="doneBar">🎉 全部切割完成！請點各曲目的「下載」儲存</div>
-
+  <div class="done-bar" id="doneBar"></div>
   <div class="note" id="noteBox"></div>
 </div>
 
-<!-- lamejs for MP3 encoding (no SharedArrayBuffer) -->
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script>
 'use strict';
 
-/* ══════════════════════════════
-   Device detection
-══════════════════════════════ */
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-const isAndroid = /Android/i.test(navigator.userAgent);
-const hasWebAudio = !!(window.AudioContext || window.webkitAudioContext);
-const hasLame = typeof lamejs !== 'undefined';
+/* ══════════════════════════════════════════════════
+   MP3 FRAME PARSER — cuts MP3 by byte range
+   No decoding needed → minimal memory → iOS safe
+══════════════════════════════════════════════════ */
+const MP3 = (() => {
+  const BITRATES = [0,32,40,48,56,64,80,96,112,128,160,192,224,256,320];
+  const SAMPLERATES = [44100,48000,32000];
 
-let OUTPUT_FMT = 'mp3'; // default MP3 for all devices (lamejs needs no SharedArrayBuffer)
-
-/* ══════════════════════════════
-   DOM refs
-══════════════════════════════ */
-const $=id=>document.getElementById(id);
-const fileIn=$('fileIn'), fname=$('fname');
-const devDot=$('devDot'), devTxt=$('devTxt');
-const btnMP3=$('btnMP3'), btnWAV=$('btnWAV'), fmtHint=$('fmtHint');
-const tsIn=$('tsIn');
-const prev=$('prev'), tList=$('tList'), tCount=$('tCount');
-const goBtn=$('goBtn');
-const prog=$('prog'), progLbl=$('progLbl'), progPct=$('progPct'), progFill=$('progFill');
-const trackCards=$('trackCards'), doneBar=$('doneBar');
-const errBox=$('errBox'), noteBox=$('noteBox');
-
-let audioFile=null, parsedTracks=[];
-
-/* ══════════════════════════════
-   Init UI by device
-══════════════════════════════ */
-function initDevice(){
-  if(isIOS){
-    devDot.style.background='var(--inf)';
-    devTxt.textContent='iPhone / iPad — MP3 / WAV 均支援';
-    setFmt('mp3');
-    noteBox.innerHTML='📱 <strong>iPhone 儲存說明：</strong><br>切割完成後，點各曲目的「⬇ 下載」按鈕，Safari 會開新分頁播放音訊。<br>接著點 Safari 底部的「<strong>分享</strong>」按鈕 → 選「<strong>儲存至檔案</strong>」即可存到 iPhone。<br>若 MP3 遇到問題可改選 WAV 格式再試。';
-  } else if(isAndroid){
-    devDot.style.background='var(--ok)';
-    devTxt.textContent='Android — 支援 MP3 / WAV';
-    setFmt('mp3');
-    noteBox.innerHTML='🤖 <strong>Android 說明：</strong><br>點「⬇ 下載」會直接存到下載資料夾。';
-  } else {
-    devDot.style.background='var(--ok)';
-    devTxt.textContent='電腦 — 支援 MP3 / WAV';
-    setFmt('mp3');
-    noteBox.innerHTML='💻 <strong>電腦說明：</strong><br>切割完成後可逐一下載，或等全部完成後一次下載。';
+  function parseFrame(buf, offset) {
+    if (offset + 4 > buf.length) return null;
+    const b0=buf[offset],b1=buf[offset+1],b2=buf[offset+2];
+    // sync word
+    if (b0 !== 0xFF || (b1 & 0xE0) !== 0xE0) return null;
+    const version = (b1 >> 3) & 0x3; // 3=MPEG1, 2=MPEG2
+    const layer = (b1 >> 1) & 0x3;   // 1=Layer3
+    if (layer !== 1) return null;     // only Layer III
+    const bitrateIdx = (b2 >> 4) & 0xF;
+    const srIdx = (b2 >> 2) & 0x3;
+    const padding = (b2 >> 1) & 0x1;
+    if (bitrateIdx === 0 || bitrateIdx === 15 || srIdx === 3) return null;
+    const bitrate = BITRATES[bitrateIdx] * 1000;
+    const sampleRate = version === 3 ? SAMPLERATES[srIdx] : SAMPLERATES[srIdx] / 2;
+    const samplesPerFrame = version === 3 ? 1152 : 576;
+    const frameSize = Math.floor(samplesPerFrame * bitrate / (8 * sampleRate)) + padding;
+    if (frameSize < 24 || frameSize > 2881) return null;
+    return { size: frameSize, sampleRate, samplesPerFrame, bitrate };
   }
-}
 
-function setFmt(fmt){
-  OUTPUT_FMT=fmt;
-  btnMP3.classList.toggle('sel', fmt==='mp3');
-  btnWAV.classList.toggle('sel', fmt==='wav');
-  if(fmt==='mp3') fmtHint.textContent='MP3 128kbps，檔案最小，iPhone / Android / 電腦均支援';
-  else fmtHint.textContent='WAV 無損原始音質，檔案約為 MP3 的 5–8 倍大';
-}
+  function findSync(buf, start) {
+    for (let i = start; i < buf.length - 3; i++) {
+      if (buf[i] === 0xFF && (buf[i+1] & 0xE0) === 0xE0) {
+        const f = parseFrame(buf, i);
+        if (f) return i;
+      }
+    }
+    return -1;
+  }
 
-initDevice();
+  // Returns array of {offset, size, duration} for each frame
+  function indexFrames(uint8) {
+    const frames = [];
+    let pos = 0;
+    // skip ID3 tag
+    if (uint8[0]===0x49&&uint8[1]===0x44&&uint8[2]===0x33) {
+      const id3size = ((uint8[6]&0x7F)<<21)|((uint8[7]&0x7F)<<14)|((uint8[8]&0x7F)<<7)|(uint8[9]&0x7F);
+      pos = 10 + id3size;
+    }
+    pos = findSync(uint8, pos);
+    if (pos < 0) return frames;
+
+    let totalSamples = 0;
+    while (pos < uint8.length - 3) {
+      const f = parseFrame(uint8, pos);
+      if (!f) { pos = findSync(uint8, pos+1); if(pos<0) break; continue; }
+      frames.push({ offset: pos, size: f.size, samples: f.samplesPerFrame,
+                    sampleRate: f.sampleRate, startSample: totalSamples });
+      totalSamples += f.samplesPerFrame;
+      pos += f.size;
+    }
+    return frames;
+  }
+
+  // Slice MP3 bytes by time (seconds)
+  function slice(uint8, frames, startSec, endSec) {
+    if (!frames.length) return null;
+    const sr = frames[0].sampleRate;
+    const startSample = Math.floor(startSec * sr);
+    const endSample = endSec != null ? Math.floor(endSec * sr) : Infinity;
+
+    let startIdx = 0, endIdx = frames.length;
+    for (let i = 0; i < frames.length; i++) {
+      if (frames[i].startSample <= startSample) startIdx = i;
+      if (frames[i].startSample >= endSample && endIdx === frames.length) { endIdx = i; break; }
+    }
+
+    // Calculate total bytes
+    let totalBytes = 0;
+    for (let i = startIdx; i < endIdx; i++) totalBytes += frames[i].size;
+    if (totalBytes === 0) return null;
+
+    const out = new Uint8Array(totalBytes);
+    let pos = 0;
+    for (let i = startIdx; i < endIdx; i++) {
+      out.set(uint8.subarray(frames[i].offset, frames[i].offset + frames[i].size), pos);
+      pos += frames[i].size;
+    }
+    return new Blob([out], { type: 'audio/mpeg' });
+  }
+
+  return { indexFrames, slice };
+})();
 
 /* ══════════════════════════════
-   WAV encoder
+   WAV encoder (fallback for non-MP3)
 ══════════════════════════════ */
-function encodeWAV(samples, sr, ch){
-  const buf=new ArrayBuffer(44+samples.length*2);
-  const v=new DataView(buf);
+function encodeWAV(samples, sr, ch) {
+  const buf = new ArrayBuffer(44 + samples.length * 2);
+  const v = new DataView(buf);
   const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
   ws(0,'RIFF');v.setUint32(4,36+samples.length*2,true);ws(8,'WAVE');
   ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);
@@ -337,52 +352,34 @@ function encodeWAV(samples, sr, ch){
 }
 
 /* ══════════════════════════════
-   MP3 encoder via lamejs
+   MP3 encoder via lamejs (for WAV/M4A→MP3)
 ══════════════════════════════ */
-function encodeMP3(left, right, sr){
-  const ch=right?2:1;
-  const enc=new lamejs.Mp3Encoder(ch,sr,128);
-  const blockSize=1152;
-  const out=[];
-  function toInt16(f32){
-    const i16=new Int16Array(f32.length);
-    for(let i=0;i<f32.length;i++)i16[i]=Math.max(-32768,Math.min(32767,f32[i]*32767));
-    return i16;
+function encodeMP3(left, right, sr) {
+  const ch = right ? 2 : 1;
+  const enc = new lamejs.Mp3Encoder(ch, sr, 128);
+  const blockSize = 1152;
+  const toI16 = f => { const a=new Int16Array(f.length); for(let i=0;i<f.length;i++) a[i]=Math.max(-32768,Math.min(32767,f[i]*32767)); return a; };
+  const L = toI16(left), R = right ? toI16(right) : null;
+  const chunks = [];
+  for (let i=0; i<L.length; i+=blockSize) {
+    const b = R ? enc.encodeBuffer(L.subarray(i,i+blockSize), R.subarray(i,i+blockSize))
+                : enc.encodeBuffer(L.subarray(i,i+blockSize));
+    if (b.length > 0) chunks.push(new Uint8Array(b));
   }
-  const L=toInt16(left);
-  const R=right?toInt16(right):null;
-  for(let i=0;i<L.length;i+=blockSize){
-    const lChunk=L.subarray(i,i+blockSize);
-    const rChunk=R?R.subarray(i,i+blockSize):null;
-    const buf=R?enc.encodeBuffer(lChunk,rChunk):enc.encodeBuffer(lChunk);
-    if(buf.length>0)out.push(new Uint8Array(buf));
-  }
-  const end=enc.flush();
-  if(end.length>0)out.push(new Uint8Array(end));
-  return new Blob(out,{type:'audio/mpeg'});
-}
-
-/* ══════════════════════════════
-   Interleave helper
-══════════════════════════════ */
-function interleave(channels){
-  if(channels.length===1)return channels[0];
-  const out=new Float32Array(channels[0].length*channels.length);
-  for(let i=0;i<channels[0].length;i++)
-    for(let c=0;c<channels.length;c++)
-      out[i*channels.length+c]=channels[c][i];
-  return out;
+  const e = enc.flush();
+  if (e.length > 0) chunks.push(new Uint8Array(e));
+  return new Blob(chunks, {type:'audio/mpeg'});
 }
 
 /* ══════════════════════════════
    Helpers
 ══════════════════════════════ */
-function showErr(msg){errBox.textContent=msg;errBox.className='err'+(msg?' on':'');}
-function toSec(s){
-  s=s.trim().replace(/^\[|\]$/g,'');
-  const p=s.split(':').map(Number);
-  return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];
-}
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const $ = id => document.getElementById(id);
+let audioFile=null, parsedTracks=[], fileBytes=null, mp3Frames=null, fileDuration=0;
+
+function showErr(msg){const e=$('errBox');e.textContent=msg;e.className='err'+(msg?' on':'');}
+function toSec(s){s=s.trim().replace(/^\[|\]$/g,'');const p=s.split(':').map(Number);return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];}
 function parseTracks(raw){
   const re=/^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s+(.+)/;
   return raw.split('\n').map(l=>l.trim()).filter(Boolean)
@@ -390,11 +387,12 @@ function parseTracks(raw){
     .filter(Boolean).sort((a,b)=>a.sec-b.sec);
 }
 function updatePreview(){
-  parsedTracks=parseTracks(tsIn.value);
+  parsedTracks=parseTracks($('tsIn').value);
+  const prev=$('prev');
   if(!parsedTracks.length){prev.classList.remove('on');check();return;}
   prev.classList.add('on');
-  tCount.textContent=parsedTracks.length+' 首';
-  tList.innerHTML='';
+  $('tCount').textContent=parsedTracks.length+' 首';
+  const tList=$('tList');tList.innerHTML='';
   parsedTracks.forEach((t,i)=>{
     const nx=parsedTracks[i+1];
     const row=document.createElement('div');row.className='trow';
@@ -403,20 +401,65 @@ function updatePreview(){
   });
   check();
 }
-function check(){goBtn.disabled=!(audioFile&&parsedTracks.length>0);}
+function check(){$('goBtn').disabled=!(audioFile&&parsedTracks.length>0);}
 function setProg(pct,lbl){
-  progFill.style.width=pct+'%';
-  progPct.textContent=Math.round(pct)+'%';
-  if(lbl)progLbl.textContent=lbl;
+  $('progFill').style.width=pct+'%';$('progPct').textContent=Math.round(pct)+'%';
+  if(lbl)$('progLbl').textContent=lbl;
 }
 function sanitize(n){return n.replace(/[\/\\:*?"<>|]/g,'_').substring(0,80);}
 
+function isMp3(file){return /\.mp3$/i.test(file.name)||file.type==='audio/mpeg';}
+
 /* ══════════════════════════════
-   Build a track card
+   Device / engine setup
 ══════════════════════════════ */
-function makeCard(t, i, total){
-  const num=String(i+1).padStart(2,'0');
-  const card=document.createElement('div');card.className='tcard';card.id='card'+i;
+function initDevice(){
+  const dot=$('devDot'),txt=$('devTxt');
+  if(isIOS){dot.style.background='var(--inf)';txt.textContent='iPhone / iPad 已偵測';}
+  else{dot.style.background='var(--ok)';txt.textContent='電腦 / Android 已偵測';}
+
+  $('noteBox').innerHTML = isIOS
+    ? '📱 <strong>iPhone 儲存：</strong>點「⬇ 下載」→ Safari 開新分頁 → 點底部<strong>分享</strong>鈕 → <strong>儲存至檔案</strong>'
+    : '💻 <strong>電腦：</strong>點「⬇ 下載」直接存檔。';
+}
+initDevice();
+
+function showEngineInfo(isMP3file){
+  const sec=$('engineSec'),box=$('engineBox');
+  sec.style.display='block';
+  if(isMP3file){
+    box.innerHTML=`<div class="engine-title">✅ MP3 直接切割模式（iPhone 最佳）</div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>不解碼音訊，直接按 frame 切割位元組，<b>記憶體佔用極低</b>，不會 crash</div></div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>輸出 <b>MP3</b>，品質與原始相同</div></div>`;
+  } else {
+    box.innerHTML=`<div class="engine-title">⚠️ 解碼再編碼模式（非 MP3 格式）</div>
+    <div class="engine-row"><span class="dot" style="background:var(--wn)"></span><div>需要解碼音訊（M4A/WAV），<b>逐首處理</b>降低記憶體</div></div>
+    <div class="engine-row"><span class="dot" style="background:var(--inf)"></span><div>iPhone 建議檔案 <b>30MB 以下</b>，較大檔案可能較慢</div></div>
+    <div class="engine-row"><span class="dot" style="background:var(--ok)"></span><div>輸出 <b>MP3</b>（lamejs 編碼）或 <b>WAV</b></div></div>`;
+  }
+}
+
+/* ══════════════════════════════
+   File input
+══════════════════════════════ */
+$('fileIn').addEventListener('change', async e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  audioFile = f;
+  fileBytes = null; mp3Frames = null;
+  $('fname').textContent = '✓ ' + f.name + ' (' + (f.size/1024/1024).toFixed(1) + ' MB)';
+  $('fname').classList.add('on');
+  showEngineInfo(isMp3(f));
+  check();
+});
+$('tsIn').addEventListener('input', updatePreview);
+
+/* ══════════════════════════════
+   Make a track card
+══════════════════════════════ */
+function makeCard(t, i){
+  const card=document.createElement('div');
+  card.className='tcard';card.id='card'+i;
   card.innerHTML=`
     <div class="tcard-hdr">
       <div class="tcard-num">${i+1}</div>
@@ -424,148 +467,135 @@ function makeCard(t, i, total){
       <div class="tcard-sz" id="sz${i}"></div>
     </div>
     <div class="tcard-body">
-      <div class="tcard-status going" id="st${i}">⏳ 處理中…</div>
-      <a class="dl-btn disabled" id="dl${i}" href="#" download="">⬇ 下載</a>
+      <div class="tcard-st" id="st${i}">⏸ 等待中</div>
+      <a class="dl-btn off" id="dl${i}" href="#" download="">⬇ 下載</a>
     </div>`;
-  trackCards.appendChild(card);
-  return card;
+  $('trackCards').appendChild(card);
+}
+
+function activateCard(i, msg){
+  const card=$('card'+i);
+  if(card){card.classList.add('active');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  const st=$('st'+i);if(st){st.className='tcard-st going';st.textContent=msg||'⏳ 切割中…';}
+}
+function doneCard(i, blob, filename){
+  const card=$('card'+i);
+  if(card){card.classList.remove('active');card.classList.add('done');}
+  const st=$('st'+i);if(st){st.className='tcard-st ok';st.textContent='✅ 完成';}
+  const sz=$('sz'+i);if(sz)sz.textContent=(blob.size/1024/1024).toFixed(1)+' MB';
+  const dl=$('dl'+i);
+  if(dl){
+    const url=URL.createObjectURL(blob);
+    dl.href=url;dl.download=filename;dl.classList.remove('off');
+    dl.addEventListener('click',ev=>{
+      if(isIOS){ev.preventDefault();window.open(url,'_blank');}
+    });
+  }
+}
+function failCard(i, msg){
+  const st=$('st'+i);if(st){st.className='tcard-st wn';st.textContent='❌ '+msg;}
 }
 
 /* ══════════════════════════════
-   Process ONE track (low memory: decode → encode → free)
+   Main split logic
 ══════════════════════════════ */
-async function processTrack(arrayBuffer, t, nx, totalDur, i){
-  const AC=window.AudioContext||window.webkitAudioContext;
-  const ctx=new AC();
-
-  // Clone buffer so each decode is independent
-  const cloned=arrayBuffer.slice(0);
-  let decoded;
-  try{
-    decoded=await ctx.decodeAudioData(cloned);
-  }catch(e){
-    await ctx.close();
-    throw new Error(`解碼失敗（第${i+1}首）`);
-  }
-
-  const sr=decoded.sampleRate;
-  const ch=decoded.numberOfChannels;
-  const dur=decoded.duration;
-  const endSec=nx?Math.min(nx.sec,dur):dur;
-  const s0=Math.floor(t.sec*sr);
-  const s1=Math.min(Math.floor(endSec*sr), decoded.getChannelData(0).length);
-
-  // Slice channels
-  const left=decoded.getChannelData(0).slice(s0,s1);
-  const right=ch>1?decoded.getChannelData(1).slice(s0,s1):null;
-
-  let blob;
-  if(OUTPUT_FMT==='mp3' && typeof lamejs!=='undefined'){
-    blob=encodeMP3(left, right, sr);
-  } else {
-    const samples=right?interleave([left,right]):left;
-    blob=encodeWAV(samples, sr, ch>1?2:1);
-  }
-
-  await ctx.close();
-  // Help GC
-  decoded=null;
-  return blob;
-}
-
-/* ══════════════════════════════
-   Download helper
-══════════════════════════════ */
-function setupDownload(dlEl, blob, filename){
-  const url=URL.createObjectURL(blob);
-  dlEl.href=url;
-  dlEl.download=filename;
-  dlEl.classList.remove('disabled');
-  dlEl.addEventListener('click',e=>{
-    if(isIOS){
-      e.preventDefault();
-      window.open(url,'_blank');
-    }
-  });
-}
-
-/* ══════════════════════════════
-   Main
-══════════════════════════════ */
-fileIn.addEventListener('change',e=>{
-  const f=e.target.files&&e.target.files[0];
-  if(f){
-    audioFile=f;
-    fname.textContent='✓ '+f.name+' ('+(f.size/1024/1024).toFixed(1)+' MB)';
-    fname.classList.add('on');
-  }
-  check();
-});
-tsIn.addEventListener('input',updatePreview);
-
-goBtn.addEventListener('click',async()=>{
+$('goBtn').addEventListener('click', async () => {
   showErr('');
-  trackCards.innerHTML='';
-  doneBar.classList.remove('on');
-  prog.classList.add('on');
-  goBtn.disabled=true;
-  goBtn.innerHTML='<span class="spin">⏳</span> 處理中…';
+  $('trackCards').innerHTML='';
+  $('doneBar').classList.remove('on');
+  $('prog').classList.add('on');
+  $('goBtn').disabled=true;
+  $('goBtn').innerHTML='<span class="spin">⏳</span> 處理中…';
 
-  try{
-    setProg(2,'讀取音訊檔案…');
-    // Read once, reuse ArrayBuffer (decode clones internally)
-    const arrayBuffer=await audioFile.arrayBuffer();
-    setProg(8,'開始逐首切割…');
+  try {
+    setProg(3,'讀取檔案…');
+    const ab = await audioFile.arrayBuffer();
+    fileBytes = new Uint8Array(ab);
+    const total = parsedTracks.length;
 
-    const total=parsedTracks.length;
-    const ext=OUTPUT_FMT==='mp3'?'mp3':'wav';
+    // Build all cards first
+    parsedTracks.forEach((t,i)=>makeCard(t,i));
 
-    // Pre-build all cards
-    parsedTracks.forEach((t,i)=>makeCard(t,i,total));
+    /* ── PATH A: MP3 frame-level cut (no decode, iOS safe) ── */
+    if (isMp3(audioFile)) {
+      setProg(15,'分析 MP3 結構…');
+      mp3Frames = MP3.indexFrames(fileBytes);
+      if (!mp3Frames.length) throw new Error('無法解析 MP3 結構，請確認檔案完整');
+      const sr = mp3Frames[0].sampleRate;
+      const totalSamples = mp3Frames[mp3Frames.length-1].startSample + mp3Frames[mp3Frames.length-1].samples;
+      fileDuration = totalSamples / sr;
 
-    for(let i=0;i<total;i++){
-      const t=parsedTracks[i], nx=parsedTracks[i+1];
-      const num=String(i+1).padStart(2,'0');
-      const filename=`${num}_${sanitize(t.name)}.${ext}`;
-
-      const stEl=$('st'+i), dlEl=$('dl'+i), szEl=$('sz'+i);
-      stEl.className='tcard-status going';
-      stEl.textContent='⏳ 切割中…';
-
-      // Scroll card into view
-      $('card'+i).scrollIntoView({behavior:'smooth',block:'nearest'});
-
-      setProg(8+Math.round(i/total*88),`切割 ${i+1}/${total}：${t.name}`);
-
-      let blob;
-      try{
-        blob=await processTrack(arrayBuffer, t, nx, null, i);
-      }catch(e){
-        stEl.className='tcard-status wn';
-        stEl.textContent='❌ '+e.message;
-        continue;
+      for (let i=0; i<total; i++) {
+        const t=parsedTracks[i], nx=parsedTracks[i+1];
+        const num=String(i+1).padStart(2,'0');
+        const filename=`${num}_${sanitize(t.name)}.mp3`;
+        activateCard(i,'⏳ 切割中…');
+        setProg(15+Math.round((i/total)*83),`切割 ${i+1}/${total}：${t.name}`);
+        await new Promise(r=>setTimeout(r,10));
+        const blob = MP3.slice(fileBytes, mp3Frames, t.sec, nx?nx.sec:null);
+        if (!blob){ failCard(i,'切割失敗'); continue; }
+        doneCard(i, blob, filename);
       }
 
-      const mb=(blob.size/1024/1024).toFixed(1);
-      szEl.textContent=mb+' MB';
-      stEl.className='tcard-status ok';
-      stEl.textContent='✓ 完成';
-      setupDownload(dlEl, blob, filename);
+    /* ── PATH B: Non-MP3 → decode one track at a time → encode MP3 ── */
+    } else {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) throw new Error('此裝置不支援 Web Audio API');
 
-      // Yield to browser between tracks
-      await new Promise(r=>setTimeout(r,50));
+      for (let i=0; i<total; i++) {
+        const t=parsedTracks[i], nx=parsedTracks[i+1];
+        const num=String(i+1).padStart(2,'0');
+        const filename=`${num}_${sanitize(t.name)}.mp3`;
+        activateCard(i,'⏳ 解碼中…');
+        setProg(5+Math.round((i/total)*90),`處理 ${i+1}/${total}：${t.name}`);
+
+        // Fresh context + fresh copy of buffer each track to allow GC
+        const ctx = new AC();
+        let decoded;
+        try {
+          // Use a fresh copy so previous decoded data can be GC'd
+          const copy = fileBytes.buffer.slice(0);
+          decoded = await ctx.decodeAudioData(copy);
+        } catch(e) {
+          await ctx.close();
+          failCard(i,'解碼失敗：'+e.message);
+          continue;
+        }
+
+        const sr=decoded.sampleRate, ch=decoded.numberOfChannels;
+        const dur=decoded.duration;
+        const endSec=nx?Math.min(nx.sec,dur):dur;
+        const s0=Math.floor(t.sec*sr);
+        const s1=Math.min(Math.floor(endSec*sr), decoded.getChannelData(0).length);
+        const left=decoded.getChannelData(0).slice(s0,s1);
+        const right=ch>1?decoded.getChannelData(1).slice(s0,s1):null;
+        await ctx.close();
+        decoded=null; // hint GC
+
+        activateCard(i,'⏳ 編碼 MP3…');
+        await new Promise(r=>setTimeout(r,20));
+        let blob;
+        try { blob=encodeMP3(left,right,sr); }
+        catch(e){ failCard(i,'MP3 編碼失敗'); continue; }
+
+        doneCard(i,blob,filename);
+        await new Promise(r=>setTimeout(r,50));
+      }
     }
 
     setProg(100,'🎉 全部完成！');
-    doneBar.classList.add('on');
+    $('doneBar').className='done-bar on';
+    $('doneBar').textContent = isIOS
+      ? '🎉 完成！點各曲目「⬇ 下載」→ Safari 新分頁 → 分享 → 儲存至檔案'
+      : '🎉 全部切割完成！點各曲目「⬇ 下載」儲存';
 
-  }catch(err){
+  } catch(err) {
     showErr('❌ 錯誤：'+err.message);
-    prog.classList.remove('on');
+    $('prog').classList.remove('on');
   }
 
-  goBtn.disabled=false;
-  goBtn.innerHTML='▶ 重新切割';
+  $('goBtn').disabled=false;
+  $('goBtn').innerHTML='▶ 重新切割';
   check();
 });
 </script>
