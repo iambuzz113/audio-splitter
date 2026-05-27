@@ -6,207 +6,172 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>音訊切割器</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f0f11;--surface:#18181c;--surface2:#222228;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.16);
-  --text:#f0ede8;--text2:#9d9a96;--text3:#4a4846;
-  --accent:#c8a96e;--warn:#e0854a;--success:#5db87a;--info:#6aabdd;
-  --r:12px;--r-sm:8px;
+  --bg:#0f0f11;--sur:#18181c;--sur2:#222228;
+  --bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.15);
+  --tx:#f0ede8;--tx2:#9d9a96;--tx3:#4a4846;
+  --ac:#c8a96e;--wn:#e0854a;--ok:#5db87a;--inf:#6aabdd;
+  --r:12px;--rs:8px;
   --xs:clamp(10px,2.8vw,12px);
   --sm:clamp(12px,3.2vw,14px);
-  --base:clamp(13px,3.6vw,15px);
+  --bs:clamp(13px,3.6vw,15px);
   --md:clamp(15px,4.2vw,18px);
   --lg:clamp(19px,5.2vw,26px);
   --p:clamp(16px,5vw,26px);
-  --gap:clamp(12px,3.5vw,18px);
+  --g:clamp(12px,3.5vw,18px);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);-webkit-text-size-adjust:100%}
-body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--text);
-  min-height:100dvh;line-height:1.6;font-size:var(--base);padding-bottom:env(safe-area-inset-bottom,20px)}
+body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--tx);
+  min-height:100dvh;line-height:1.6;font-size:var(--bs);
+  padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
 
-/* ── Header ── */
-.hdr{background:var(--surface);border-bottom:1px solid var(--border);
+/* Header */
+.hdr{background:var(--sur);border-bottom:1px solid var(--bd);
   padding:clamp(12px,3.5vw,20px) var(--p);
-  display:flex;align-items:center;gap:12px;
-  position:sticky;top:0;z-index:100;
-  padding-top:calc(clamp(12px,3.5vw,20px) + env(safe-area-inset-top,0px))}
-.hdr-icon{width:clamp(38px,10vw,50px);height:clamp(38px,10vw,50px);
-  background:linear-gradient(135deg,var(--accent),var(--warn));
-  border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  font-size:clamp(20px,5vw,26px);color:#0f0f11;flex-shrink:0}
-.hdr-t{font-size:var(--lg);font-weight:700;letter-spacing:-.02em}
-.hdr-s{font-size:var(--xs);color:var(--text2);margin-top:1px}
+  padding-top:calc(clamp(12px,3.5vw,20px) + env(safe-area-inset-top,0px));
+  display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.hico{width:clamp(38px,10vw,50px);height:clamp(38px,10vw,50px);
+  background:linear-gradient(135deg,var(--ac),var(--wn));
+  border-radius:var(--rs);display:flex;align-items:center;justify-content:center;
+  font-size:clamp(20px,5vw,26px);flex-shrink:0}
+.htitle{font-size:var(--lg);font-weight:700;letter-spacing:-.02em}
+.hsub{font-size:var(--xs);color:var(--tx2);margin-top:1px}
 
-/* ── Container ── */
 .wrap{max-width:660px;margin:0 auto;padding:var(--p)}
-
-/* ── Section label ── */
-.lbl{font-size:var(--xs);font-weight:600;color:var(--accent);
+.sec{margin-bottom:var(--g)}
+.lbl{font-size:var(--xs);font-weight:600;color:var(--ac);
   letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;
   display:flex;align-items:center;gap:6px}
-.lbl svg{width:14px;height:14px;flex-shrink:0}
-.sec{margin-bottom:var(--gap)}
 
-/* ── Upload — KEY FIX: real <label> wrapping <input> ── */
-.upload-label{
-  display:block;
-  border:1.5px dashed var(--border2);border-radius:var(--r);
-  padding:clamp(26px,8vw,44px) var(--p);text-align:center;
-  cursor:pointer;transition:all .2s;background:var(--surface);
-  -webkit-tap-highlight-color:transparent;
-  user-select:none;-webkit-user-select:none}
-.upload-label:active{background:rgba(200,169,110,0.08);border-color:var(--accent)}
-.upload-label .uico{font-size:clamp(30px,9vw,44px);color:var(--accent);
-  display:block;margin-bottom:10px;line-height:1}
-.upload-label .utitle{font-size:var(--md);font-weight:500;margin-bottom:4px}
-.upload-label .uhint{font-size:var(--xs);color:var(--text2)}
-.upload-label .ufname{margin-top:12px;font-size:var(--sm);font-weight:500;
-  color:var(--success);word-break:break-all;display:none}
-.upload-label .ufname.on{display:block}
-/* Hidden file input — visually hidden but accessible */
-#fileInput{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+/* Upload */
+.ulabel{display:block;border:1.5px dashed var(--bd2);border-radius:var(--r);
+  padding:clamp(26px,8vw,44px) var(--p);text-align:center;cursor:pointer;
+  background:var(--sur);transition:all .2s;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.ulabel:active{background:rgba(200,169,110,0.08);border-color:var(--ac)}
+.ulabel .uico{font-size:clamp(30px,9vw,44px);display:block;margin-bottom:10px;line-height:1}
+.ulabel .ut{font-size:var(--md);font-weight:500;margin-bottom:4px}
+.ulabel .uh{font-size:var(--xs);color:var(--tx2)}
+.ufn{margin-top:12px;font-size:var(--sm);font-weight:500;color:var(--ok);
+  word-break:break-all;display:none}
+.ufn.on{display:block}
+#fileIn{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 
-/* ── Textarea ── */
-textarea{width:100%;min-height:clamp(110px,28vw,150px);
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  color:var(--text);font-family:'DM Mono',monospace;font-size:var(--sm);
-  line-height:1.9;padding:13px 15px;resize:vertical;
-  transition:border-color .2s;-webkit-appearance:none;appearance:none}
-textarea:focus{outline:none;border-color:var(--accent)}
-textarea::placeholder{color:var(--text3)}
+/* Textarea */
+textarea{width:100%;min-height:clamp(110px,28vw,150px);background:var(--sur);
+  border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);
+  font-family:'DM Mono',monospace;font-size:var(--sm);line-height:1.9;
+  padding:13px 15px;resize:vertical;-webkit-appearance:none;appearance:none;
+  transition:border-color .2s}
+textarea:focus{outline:none;border-color:var(--ac)}
+textarea::placeholder{color:var(--tx3)}
 
-/* ── Chips ── */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{font-size:var(--xs);font-family:'DM Mono',monospace;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:100px;padding:3px 10px;color:var(--text2)}
+  background:var(--sur2);border:1px solid var(--bd);border-radius:100px;
+  padding:3px 10px;color:var(--tx2)}
 
-/* ── Track preview ── */
-.prev-box{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);overflow:hidden;display:none}
-.prev-box.on{display:block}
-.prev-hdr{padding:10px 14px;border-bottom:1px solid var(--border);
+/* Preview */
+.prev{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);
+  overflow:hidden;display:none}
+.prev.on{display:block}
+.prev-hdr{padding:10px 14px;border-bottom:1px solid var(--bd);
   display:flex;align-items:center;justify-content:space-between;font-size:var(--sm)}
-.prev-hdr .badge{background:var(--accent);color:#0f0f11;font-size:var(--xs);
-  font-weight:700;padding:2px 8px;border-radius:100px}
-.t-list{max-height:clamp(160px,42vw,240px);overflow-y:auto}
-.t-row{display:grid;grid-template-columns:26px 1fr auto;align-items:center;
-  gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
-.t-row:last-child{border-bottom:none}
-.t-num{width:22px;height:22px;border-radius:50%;
-  background:rgba(200,169,110,0.15);color:var(--accent);
-  font-size:var(--xs);font-weight:700;display:flex;align-items:center;justify-content:center}
-.t-name{font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.t-time{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--text2);white-space:nowrap}
+.badge{background:var(--ac);color:#0f0f11;font-size:var(--xs);font-weight:700;
+  padding:2px 8px;border-radius:100px}
+.tlist{max-height:clamp(160px,42vw,240px);overflow-y:auto}
+.trow{display:grid;grid-template-columns:26px 1fr auto;align-items:center;
+  gap:10px;padding:9px 14px;border-bottom:1px solid var(--bd)}
+.trow:last-child{border-bottom:none}
+.tnum{width:22px;height:22px;border-radius:50%;
+  background:rgba(200,169,110,0.15);color:var(--ac);font-size:var(--xs);
+  font-weight:700;display:flex;align-items:center;justify-content:center}
+.tname{font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ttime{font-size:var(--xs);font-family:'DM Mono',monospace;color:var(--tx2);white-space:nowrap}
 
-/* ── Primary button ── */
-.go-btn{width:100%;padding:clamp(14px,4.2vw,19px);
-  background:linear-gradient(135deg,var(--accent),var(--warn));
+/* Buttons */
+.gobtn{width:100%;padding:clamp(14px,4.2vw,19px);
+  background:linear-gradient(135deg,var(--ac),var(--wn));
   border:none;border-radius:var(--r);color:#0f0f11;
   font-size:var(--md);font-weight:700;font-family:'Noto Sans TC',sans-serif;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:opacity .2s,transform .1s;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.go-btn:active{transform:scale(.97)}
-.go-btn:disabled{opacity:.32;cursor:not-allowed;transform:none}
-
-/* ── Progress ── */
-.prog-wrap{display:none}
-.prog-wrap.on{display:block}
-.prog-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.prog-lbl{font-size:var(--sm);color:var(--text2)}
-.prog-pct{font-size:var(--sm);font-family:'DM Mono',monospace;color:var(--accent);font-weight:500}
-.prog-bar{height:5px;background:var(--surface2);border-radius:100px;overflow:hidden;margin-bottom:10px}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--warn));
-  border-radius:100px;transition:width .3s ease;width:0%}
-
-/* ── Log ── */
-.log-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);
-  padding:10px 12px;font-family:'DM Mono',monospace;font-size:var(--xs);color:var(--text2);
-  max-height:80px;overflow-y:auto;line-height:1.7;display:none}
-.log-box.on{display:block}
-
-/* ── Results ── */
-.res-wrap{display:none}
-.res-wrap.on{display:block}
-.res-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;
-  font-size:var(--sm);font-weight:500;color:var(--success)}
-.res-list{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);overflow:hidden;margin-bottom:10px}
-.res-item{display:flex;align-items:center;gap:8px;padding:10px 14px;
-  border-bottom:1px solid var(--border)}
-.res-item:last-child{border-bottom:none}
-.res-name{flex:1;font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.res-sz{font-size:var(--xs);color:var(--text3);font-family:'DM Mono',monospace;flex-shrink:0}
-.dl-a{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;
-  background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.28);
-  border-radius:100px;color:var(--accent);font-size:var(--xs);font-weight:500;
-  text-decoration:none;white-space:nowrap;flex-shrink:0;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;cursor:pointer}
-.dl-a:active{background:rgba(200,169,110,0.24)}
-
-/* ── Secondary button ── */
-.sec-btn{width:100%;padding:13px;background:var(--surface2);
-  border:1px solid var(--border2);border-radius:var(--r);color:var(--text);
-  font-size:var(--base);font-weight:500;font-family:'Noto Sans TC',sans-serif;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:opacity .2s,transform .1s}
+.gobtn:active{transform:scale(.97)}
+.gobtn:disabled{opacity:.32;cursor:not-allowed;transform:none}
+.secbtn{width:100%;padding:13px;background:var(--sur2);
+  border:1px solid var(--bd2);border-radius:var(--r);color:var(--tx);
+  font-size:var(--bs);font-weight:500;font-family:'Noto Sans TC',sans-serif;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
   -webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.sec-btn:active{background:var(--border)}
+.secbtn:active{background:var(--bd)}
 
-/* ── Error ── */
-.err-box{background:rgba(224,133,74,0.1);border:1px solid rgba(224,133,74,0.3);
-  border-radius:var(--r-sm);padding:10px 14px;font-size:var(--sm);color:var(--warn);
-  display:none;line-height:1.6;white-space:pre-wrap}
-.err-box.on{display:block}
+/* Progress */
+.prog{display:none}
+.prog.on{display:block}
+.prog-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-lbl{font-size:var(--sm);color:var(--tx2)}
+.prog-pct{font-size:var(--sm);font-family:'DM Mono',monospace;color:var(--ac);font-weight:500}
+.prog-bar{height:5px;background:var(--sur2);border-radius:100px;overflow:hidden;margin-bottom:10px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--wn));
+  border-radius:100px;transition:width .4s ease;width:0%}
+.logbox{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rs);
+  padding:10px 12px;font-family:'DM Mono',monospace;font-size:var(--xs);color:var(--tx2);
+  max-height:80px;overflow-y:auto;line-height:1.7;display:none}
+.logbox.on{display:block}
 
-/* ── Info note ── */
+/* Results */
+.res{display:none}
+.res.on{display:block}
+.res-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;
+  font-size:var(--sm);font-weight:500;color:var(--ok)}
+.rlist{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);
+  overflow:hidden;margin-bottom:10px}
+.ritem{display:flex;align-items:center;gap:8px;padding:10px 14px;
+  border-bottom:1px solid var(--bd)}
+.ritem:last-child{border-bottom:none}
+.rname{flex:1;font-size:var(--sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rsz{font-size:var(--xs);color:var(--tx3);font-family:'DM Mono',monospace;flex-shrink:0}
+.dla{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;
+  background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.28);
+  border-radius:100px;color:var(--ac);font-size:var(--xs);font-weight:500;
+  text-decoration:none;white-space:nowrap;flex-shrink:0;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.dla:active{background:rgba(200,169,110,0.26)}
+
+/* Error */
+.err{background:rgba(224,133,74,0.1);border:1px solid rgba(224,133,74,0.3);
+  border-radius:var(--rs);padding:10px 14px;font-size:var(--sm);color:var(--wn);
+  display:none;line-height:1.7;white-space:pre-wrap}
+.err.on{display:block}
+
+/* Note */
 .note{background:rgba(106,171,221,0.07);border:1px solid rgba(106,171,221,0.18);
-  border-radius:var(--r-sm);padding:11px 14px;font-size:var(--xs);color:var(--info);
-  line-height:1.75;margin-top:var(--gap)}
+  border-radius:var(--rs);padding:12px 14px;font-size:var(--xs);color:var(--inf);
+  line-height:1.8;margin-top:var(--g)}
 
-/* ── Scrollbar ── */
+/* Engine badge */
+.engine-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;
+  font-size:var(--xs);color:var(--tx2);background:var(--sur2);
+  border:1px solid var(--bd);border-radius:100px;padding:3px 10px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+
 ::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* ── Spinner anim ── */
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{display:inline-block;animation:spin .8s linear infinite}
+.spin{display:inline-block;animation:spin .9s linear infinite}
 </style>
 </head>
 <body>
 
-<!-- Service Worker registration for COOP/COEP headers (required for SharedArrayBuffer / ffmpeg.wasm) -->
-<script>
-if ('serviceWorker' in navigator) {
-  // Inline SW as blob to avoid needing a separate sw.js file
-  const swCode = `
-self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    fetch(e.request).then(r => {
-      const h = new Headers(r.headers);
-      h.set('Cross-Origin-Opener-Policy','same-origin');
-      h.set('Cross-Origin-Embedder-Policy','require-corp');
-      return new Response(r.body, {status:r.status, statusText:r.statusText, headers:h});
-    }).catch(() => fetch(e.request))
-  );
-});`;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl, {scope:'/'}).catch(()=>{});
-}
-</script>
-
 <header class="hdr">
-  <div class="hdr-icon">✂</div>
+  <div class="hico">✂</div>
   <div>
-    <div class="hdr-t">音訊切割器</div>
-    <div class="hdr-s">Audio Splitter · MP3 / M4A / WAV / FLAC</div>
+    <div class="htitle">音訊切割器</div>
+    <div class="hsub">Audio Splitter · MP3 / M4A / WAV / FLAC</div>
   </div>
 </header>
 
@@ -214,35 +179,32 @@ self.addEventListener('fetch', e => {
 
   <!-- Step 1 -->
   <div class="sec">
-    <div class="lbl">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      步驟一：選擇音訊檔
-    </div>
-    <!-- label直接包住input，iOS Safari原生支援 -->
-    <label class="upload-label" id="uploadLabel" for="fileInput">
+    <div class="lbl">① 選擇音訊檔</div>
+    <label class="ulabel" for="fileIn">
       <span class="uico">🎵</span>
-      <div class="utitle">點此選擇音訊檔案</div>
-      <div class="uhint">MP3 · M4A · WAV · FLAC · AAC · OGG</div>
-      <div class="ufname" id="fname"></div>
+      <div class="ut">點此選擇音訊檔案</div>
+      <div class="uh">MP3 · M4A · WAV · FLAC · AAC · OGG</div>
+      <div class="ufn" id="fname"></div>
     </label>
-    <input type="file" id="fileInput"
-      accept=".mp3,.m4a,.wav,.flac,.aac,.ogg,.opus,.wma,audio/mpeg,audio/mp4,audio/wav,audio/x-wav,audio/flac,audio/aac,audio/ogg,audio/*">
+    <input type="file" id="fileIn"
+      accept=".mp3,.m4a,.mp4,.wav,.flac,.aac,.ogg,.opus,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/x-wav,audio/flac,audio/aac,audio/ogg,audio/*">
+    <div class="engine-badge" id="engineBadge">
+      <span class="dot" id="engineDot" style="background:var(--tx3)"></span>
+      <span id="engineTxt">偵測引擎中…</span>
+    </div>
   </div>
 
   <!-- Step 2 -->
   <div class="sec">
-    <div class="lbl">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      步驟二：貼上時間軸
-    </div>
-    <textarea id="tsInput" placeholder="每行一首，範例：
+    <div class="lbl">② 貼上時間軸</div>
+    <textarea id="tsIn" placeholder="每行一首，例如：
 00:00 醉夢人
 03:33 雨季唱片
 06:50 昨日的約定
 12:12 Just Like That Night（就像那晚）
 41:45 霧色倫敦
 
-支援直接貼上 YouTube 章節格式"></textarea>
+可直接貼上 YouTube 章節格式"></textarea>
     <div class="chips">
       <span class="chip">00:00 曲名</span>
       <span class="chip">[00:00] 曲名</span>
@@ -252,231 +214,292 @@ self.addEventListener('fetch', e => {
 
   <!-- Preview -->
   <div class="sec">
-    <div class="prev-box" id="prevBox">
+    <div class="prev" id="prev">
       <div class="prev-hdr">
         <span>解析結果</span>
         <span class="badge" id="tCount">0 首</span>
       </div>
-      <div class="t-list" id="tList"></div>
+      <div class="tlist" id="tList"></div>
     </div>
   </div>
 
-  <div class="err-box" id="errBox"></div>
+  <div class="err" id="errBox"></div>
 
   <!-- Step 3 -->
   <div class="sec">
-    <div class="lbl">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
-      步驟三：開始切割
-    </div>
-    <button class="go-btn" id="goBtn" disabled>▶ 開始切割</button>
+    <div class="lbl">③ 開始切割</div>
+    <button class="gobtn" id="goBtn" disabled>▶ 開始切割</button>
   </div>
 
   <!-- Progress -->
-  <div class="prog-wrap" id="progWrap">
+  <div class="prog" id="prog">
     <div class="prog-hdr">
-      <span class="prog-lbl" id="progLbl">初始化…</span>
+      <span class="prog-lbl" id="progLbl">處理中…</span>
       <span class="prog-pct" id="progPct">0%</span>
     </div>
     <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-    <div class="log-box" id="logBox"></div>
+    <div class="logbox" id="logBox"></div>
   </div>
 
   <!-- Results -->
-  <div class="res-wrap" id="resWrap">
-    <div class="res-hdr">✅ 切割完成！點各曲目下載</div>
-    <div class="res-list" id="resList"></div>
-    <button class="sec-btn" id="dlAllBtn">⬇ 全部下載（電腦用）</button>
+  <div class="res" id="res">
+    <div class="res-hdr">✅ 切割完成！</div>
+    <div class="rlist" id="rList"></div>
+    <button class="secbtn" id="dlAll" style="margin-top:4px">⬇ 全部下載（電腦）</button>
   </div>
 
   <div class="note">
-    📱 <strong>iPhone / iPad 說明：</strong><br>
-    · 選檔：點上方區塊，從「檔案」App 或「照片」選取音訊<br>
-    · 下載：iOS 每次只能存一個檔，請逐一點擊各曲目的「下載」<br>
-    · 首次使用需載入引擎約 10–20 秒，請耐心等候<br>
-    · 建議在 Wi-Fi 下操作大檔案（>50 MB）
+    📱 <strong>iPhone / iPad 提示</strong><br>
+    · 純瀏覽器處理，不需安裝任何 App<br>
+    · 選檔後從「檔案」或「照片」App 選取音訊<br>
+    · 切割完成後請逐一點擊「下載」儲存<br>
+    · 建議在 Wi-Fi 下操作 50 MB 以上的大檔案
   </div>
-
 </div>
 
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 <script>
 'use strict';
+// ── Polyfill: MP3 encoder (pure JS, no SharedArrayBuffer needed) ──
+// We use Web Audio API to decode → encode back to WAV or MP3
+// For broad iOS compat we output WAV (universal) or use lamejs for MP3
+
+/* ── tiny WAV encoder ── */
+function encodeWAV(samples, sampleRate, numChannels) {
+  const len = samples.length;
+  const buf = new ArrayBuffer(44 + len * 2);
+  const view = new DataView(buf);
+  function ws(off, str) { for (let i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); }
+  function wu32(off, v) { view.setUint32(off, v, true); }
+  function wu16(off, v) { view.setUint16(off, v, true); }
+  ws(0, 'RIFF'); wu32(4, 36 + len * 2); ws(8, 'WAVE');
+  ws(12, 'fmt '); wu32(16, 16); wu16(20, 1); wu16(22, numChannels);
+  wu32(24, sampleRate); wu32(28, sampleRate * numChannels * 2);
+  wu16(32, numChannels * 2); wu16(34, 16);
+  ws(36, 'data'); wu32(40, len * 2);
+  let off = 44;
+  for (let i = 0; i < len; i++, off += 2) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+/* ── interleave multi-channel ── */
+function interleave(channels) {
+  if (channels.length === 1) return channels[0];
+  const len = channels[0].length;
+  const out = new Float32Array(len * channels.length);
+  for (let i = 0; i < len; i++)
+    for (let c = 0; c < channels.length; c++)
+      out[i * channels.length + c] = channels[c][i];
+  return out;
+}
+
+/* ── DOM refs ── */
 const $=id=>document.getElementById(id);
-const fileInput=$('fileInput'), fname=$('fname');
-const tsInput=$('tsInput');
+const fileIn=$('fileIn'), fname=$('fname');
+const tsIn=$('tsIn');
 const goBtn=$('goBtn');
-const prevBox=$('prevBox'), tList=$('tList'), tCount=$('tCount');
-const progWrap=$('progWrap'), progLbl=$('progLbl'), progPct=$('progPct'), progFill=$('progFill');
+const prev=$('prev'), tList=$('tList'), tCount=$('tCount');
+const prog=$('prog'), progLbl=$('progLbl'), progPct=$('progPct'), progFill=$('progFill');
 const logBox=$('logBox');
-const resWrap=$('resWrap'), resList=$('resList'), dlAllBtn=$('dlAllBtn');
+const res=$('res'), rList=$('rList'), dlAll=$('dlAll');
 const errBox=$('errBox');
+const engineDot=$('engineDot'), engineTxt=$('engineTxt');
 
 let audioFile=null, parsedTracks=[], outputBlobs=[];
 
-// ── error display ──
-function showErr(msg){errBox.textContent=msg;errBox.className='err-box'+(msg?' on':'');}
-
-// ── time helpers ──
-function toSec(s){
-  s=s.trim().replace(/^\[|\]$/g,'');
-  const p=s.split(':').map(Number);
-  return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];
+/* ── engine detection ── */
+const hasWebAudio = !!(window.AudioContext || window.webkitAudioContext);
+if (hasWebAudio) {
+  engineDot.style.background = 'var(--ok)';
+  engineTxt.textContent = '✓ Web Audio API（iOS 原生支援）';
+} else {
+  engineDot.style.background = 'var(--wn)';
+  engineTxt.textContent = '⚠ 瀏覽器不支援音訊處理';
 }
 
-// ── parse timestamps ──
-function parseTracks(raw){
-  const re=/^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s+(.+)/;
+/* ── helpers ── */
+function showErr(msg) { errBox.textContent = msg; errBox.className = 'err' + (msg ? ' on' : ''); }
+
+function toSec(s) {
+  s = s.trim().replace(/^\[|\]$/g, '');
+  const p = s.split(':').map(Number);
+  return p.length === 3 ? p[0]*3600+p[1]*60+p[2] : p[0]*60+p[1];
+}
+
+function parseTracks(raw) {
+  const re = /^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s+(.+)/;
   return raw.split('\n').map(l=>l.trim()).filter(Boolean)
     .map(l=>{const m=l.match(re);return m?{sec:toSec(m[1]),ts:m[1].replace(/^\[|\]$/g,''),name:m[2].trim()}:null;})
     .filter(Boolean).sort((a,b)=>a.sec-b.sec);
 }
 
-// ── update preview ──
-function updatePreview(){
-  parsedTracks=parseTracks(tsInput.value);
-  if(!parsedTracks.length){prevBox.classList.remove('on');check();return;}
-  prevBox.classList.add('on');
-  tCount.textContent=parsedTracks.length+' 首';
-  tList.innerHTML='';
-  parsedTracks.forEach((t,i)=>{
-    const nx=parsedTracks[i+1];
-    const row=document.createElement('div');
-    row.className='t-row';
-    row.innerHTML=`<div class="t-num">${i+1}</div><div class="t-name">${t.name}</div><div class="t-time">${t.ts}→${nx?nx.ts:'結尾'}</div>`;
+function updatePreview() {
+  parsedTracks = parseTracks(tsIn.value);
+  if (!parsedTracks.length) { prev.classList.remove('on'); check(); return; }
+  prev.classList.add('on');
+  tCount.textContent = parsedTracks.length + ' 首';
+  tList.innerHTML = '';
+  parsedTracks.forEach((t, i) => {
+    const nx = parsedTracks[i+1];
+    const row = document.createElement('div');
+    row.className = 'trow';
+    row.innerHTML = `<div class="tnum">${i+1}</div><div class="tname">${t.name}</div><div class="ttime">${t.ts}→${nx?nx.ts:'結尾'}</div>`;
     tList.appendChild(row);
   });
   check();
 }
 
-function check(){goBtn.disabled=!(audioFile&&parsedTracks.length>0);}
+function check() { goBtn.disabled = !(audioFile && parsedTracks.length > 0); }
 
-// ── file input — works on iOS because it's a real label>input ──
-fileInput.addEventListener('change',e=>{
-  const f=e.target.files&&e.target.files[0];
-  if(f){
-    audioFile=f;
-    fname.textContent='✓ '+f.name;
-    fname.classList.add('on');
-  }
+function setProg(pct, lbl) {
+  progFill.style.width = pct + '%';
+  progPct.textContent = Math.round(pct) + '%';
+  if (lbl) progLbl.textContent = lbl;
+}
+
+function addLog(msg) {
+  logBox.classList.add('on');
+  logBox.textContent += msg + '\n';
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+function sanitize(n) { return n.replace(/[\/\\:*?"<>|]/g,'_').substring(0,80); }
+
+/* ── file input ── */
+fileIn.addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  if (f) { audioFile = f; fname.textContent = '✓ ' + f.name; fname.classList.add('on'); }
   check();
 });
 
-tsInput.addEventListener('input',updatePreview);
+tsIn.addEventListener('input', updatePreview);
 
-// ── progress ──
-function setProg(pct,lbl){
-  progFill.style.width=pct+'%';
-  progPct.textContent=Math.round(pct)+'%';
-  if(lbl)progLbl.textContent=lbl;
-}
-function addLog(msg){
-  logBox.classList.add('on');
-  logBox.textContent+=msg+'\n';
-  logBox.scrollTop=logBox.scrollHeight;
-}
-
-// ── sanitize filename ──
-function clean(n){return n.replace(/[\/\\:*?"<>|]/g,'_').substring(0,80);}
-
-// ── main split logic ──
-goBtn.addEventListener('click',async()=>{
+/* ── Main: Web Audio API split ── */
+goBtn.addEventListener('click', async () => {
   showErr('');
-  outputBlobs=[];
-  resList.innerHTML='';
-  resWrap.classList.remove('on');
-  logBox.textContent='';
+  outputBlobs = [];
+  rList.innerHTML = '';
+  res.classList.remove('on');
+  logBox.textContent = '';
   logBox.classList.remove('on');
-  progWrap.classList.add('on');
-  goBtn.disabled=true;
-  goBtn.innerHTML='<span class="spin">⏳</span> 處理中…';
+  prog.classList.add('on');
+  goBtn.disabled = true;
+  goBtn.innerHTML = '<span class="spin">⏳</span> 處理中…';
 
-  try{
-    setProg(5,'載入 ffmpeg 引擎，請稍候…');
-    const {createFFmpeg,fetchFile}=FFmpeg;
-    const ff=createFFmpeg({
-      corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-      log:false
-    });
-    await ff.load();
+  try {
+    setProg(5, '讀取音訊檔案…');
 
-    setProg(18,'讀取音訊檔案…');
-    const ext=(audioFile.name.split('.').pop()||'mp3').toLowerCase();
-    const inName='input.'+ext;
-    ff.FS('writeFile',inName,await fetchFile(audioFile));
+    // 1. Read file as ArrayBuffer
+    const arrayBuf = await audioFile.arrayBuffer();
 
-    const total=parsedTracks.length;
-    for(let i=0;i<total;i++){
-      const t=parsedTracks[i], nx=parsedTracks[i+1];
-      const num=String(i+1).padStart(2,'0');
-      const out=`${num}_${clean(t.name)}.mp3`;
-      const args=['-i',inName,'-ss',String(t.sec)];
-      if(nx)args.push('-to',String(nx.sec));
-      args.push('-c','copy','-y',out);
+    setProg(15, '解碼音訊（可能需要數秒）…');
 
-      setProg(18+Math.round(i/total*74),`切割 ${i+1}/${total}：${t.name}`);
-      addLog(`▶ ${out}`);
-      await ff.run(...args);
-
-      let data;
-      try{data=ff.FS('readFile',out);}
-      catch(e){
-        addLog('  → 重新編碼…');
-        const a2=['-i',inName,'-ss',String(t.sec)];
-        if(nx)a2.push('-to',String(nx.sec));
-        a2.push('-codec:a','libmp3lame','-q:a','2','-y',out);
-        await ff.run(...a2);
-        data=ff.FS('readFile',out);
-      }
-      const blob=new Blob([data.buffer],{type:'audio/mpeg'});
-      outputBlobs.push({name:out,blob});
-      addLog(`  ✓ ${(blob.size/1024/1024).toFixed(1)} MB`);
+    // 2. Decode with Web Audio API — fully supported on iOS Safari
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    let decoded;
+    try {
+      decoded = await ctx.decodeAudioData(arrayBuf);
+    } catch(e) {
+      throw new Error('音訊解碼失敗，請確認檔案格式正確。\n支援：MP3、M4A、AAC、WAV、FLAC（部分裝置）');
     }
 
-    setProg(100,'🎉 全部完成！');
-    resWrap.classList.add('on');
+    const sr = decoded.sampleRate;
+    const ch = decoded.numberOfChannels;
+    const totalDur = decoded.duration;
+    addLog(`✓ 解碼完成：${ch}聲道, ${sr}Hz, ${totalDur.toFixed(1)}秒`);
 
-    outputBlobs.forEach(({name,blob})=>{
-      const url=URL.createObjectURL(blob);
-      const mb=(blob.size/1024/1024).toFixed(1);
-      const item=document.createElement('div');
-      item.className='res-item';
-      const nameEl=document.createElement('span');
-      nameEl.className='res-name';nameEl.textContent=name;
-      const szEl=document.createElement('span');
-      szEl.className='res-sz';szEl.textContent=mb+' MB';
-      const a=document.createElement('a');
-      a.href=url;a.download=name;a.className='dl-a';
-      a.textContent='⬇ 下載';
-      // iOS fallback: if download attr not supported, open in new tab
-      a.addEventListener('click',e=>{
-        if(typeof a.download==='undefined'||navigator.userAgent.match(/iPhone|iPad/i)){
-          e.preventDefault();window.open(url,'_blank');
+    // 3. Extract channel data
+    const channels = [];
+    for (let c = 0; c < ch; c++) channels.push(decoded.getChannelData(c));
+
+    const total = parsedTracks.length;
+    setProg(20, `開始切割 ${total} 首…`);
+
+    for (let i = 0; i < total; i++) {
+      const t = parsedTracks[i];
+      const nx = parsedTracks[i+1];
+      const startSec = t.sec;
+      const endSec = nx ? Math.min(nx.sec, totalDur) : totalDur;
+      const dur = endSec - startSec;
+
+      if (dur <= 0) { addLog(`⚠ 跳過 ${t.name}（時間無效）`); continue; }
+
+      const startSample = Math.floor(startSec * sr);
+      const endSample = Math.min(Math.floor(endSec * sr), channels[0].length);
+      const numSamples = endSample - startSample;
+
+      // Slice each channel
+      const slicedChannels = channels.map(c => c.slice(startSample, endSample));
+      const interleaved = interleave(slicedChannels);
+
+      const blob = encodeWAV(interleaved, sr, ch);
+      const num = String(i+1).padStart(2,'0');
+      const name = `${num}_${sanitize(t.name)}.wav`;
+      outputBlobs.push({ name, blob });
+
+      const pct = 20 + Math.round(((i+1)/total)*78);
+      setProg(pct, `切割 ${i+1}/${total}：${t.name}`);
+      addLog(`✓ ${name}（${dur.toFixed(1)}秒, ${(blob.size/1024/1024).toFixed(1)} MB）`);
+
+      // Yield to UI thread so progress bar updates
+      await new Promise(r => setTimeout(r, 0));
+    }
+
+    setProg(100, '🎉 全部完成！');
+    res.classList.add('on');
+    await ctx.close();
+
+    outputBlobs.forEach(({ name, blob }) => {
+      const url = URL.createObjectURL(blob);
+      const mb = (blob.size/1024/1024).toFixed(1);
+      const item = document.createElement('div');
+      item.className = 'ritem';
+
+      const nameEl = document.createElement('span');
+      nameEl.className = 'rname'; nameEl.textContent = name;
+
+      const szEl = document.createElement('span');
+      szEl.className = 'rsz'; szEl.textContent = mb + ' MB';
+
+      const a = document.createElement('a');
+      a.href = url; a.download = name; a.className = 'dla';
+      a.textContent = '⬇ 下載';
+
+      // iOS: open in new tab if download attr unsupported
+      a.addEventListener('click', e => {
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isIOS) {
+          e.preventDefault();
+          window.open(url, '_blank');
         }
       });
-      item.append(nameEl,szEl,a);
-      resList.appendChild(item);
+
+      item.append(nameEl, szEl, a);
+      rList.appendChild(item);
     });
 
-  }catch(err){
-    showErr('發生錯誤：'+err.message+'\n\n可能原因：\n· 音訊格式不支援\n· 記憶體不足（檔案過大）\n· 網路問題（ffmpeg 引擎下載失敗）\n\n請重新整理後再試。');
-    progWrap.classList.remove('on');
+  } catch(err) {
+    showErr('❌ 發生錯誤：\n' + err.message);
+    prog.classList.remove('on');
   }
 
-  goBtn.disabled=false;
-  goBtn.innerHTML='▶ 再次切割';
+  goBtn.disabled = false;
+  goBtn.innerHTML = '▶ 再次切割';
   check();
 });
 
-// Desktop: download all
-dlAllBtn.addEventListener('click',()=>{
-  outputBlobs.forEach(({name,blob},i)=>{
-    setTimeout(()=>{
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(blob);
-      a.download=name;
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-    },i*700);
+/* ── Download all (desktop) ── */
+dlAll.addEventListener('click', () => {
+  outputBlobs.forEach(({ name, blob }, i) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }, i * 800);
   });
 });
 </script>
