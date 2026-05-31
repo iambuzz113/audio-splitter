@@ -261,7 +261,7 @@ textarea::placeholder{color:var(--tx3)}
     <div class="ios-track-num" id="iosNum"></div>
     <div class="ios-track-name" id="iosName"></div>
     <div class="ios-track-time" id="iosTime"></div>
-    <a class="ios-dl-btn off" id="iosDlBtn" href="#" download="">⬇ 下載此曲</a>
+    <a class="ios-dl-btn off" id="iosDlBtn" href="#" download="">📤 儲存此曲至檔案</a>
     <button class="ios-next-btn" id="iosNextBtn"></button>
     <div class="ios-hint" id="iosHint">切割中，請稍候…</div>
   </div>
@@ -390,7 +390,7 @@ let iosCurrentIdx=0,iosReadyForNext=false;
   const dot=$('devDot'),txt=$('devTxt');
   if(isIOS){
     dot.style.background='var(--inf)';txt.textContent='iPhone / iPad';
-    $('noteBox').innerHTML='📱 <strong>iPhone 儲存：</strong>點「⬇ 下載此曲」→ Safari 新分頁開啟 → 點底部<strong>分享</strong>鈕 → <strong>儲存至檔案</strong><br>下載後點「下一首」繼續切割，記憶體會自動釋放。';
+    $('noteBox').innerHTML='📱 <strong>iPhone 儲存說明：</strong>切割完成後點「📤 儲存此曲至檔案」，會彈出 iOS 原生分享選單，選「<strong>儲存至檔案</strong>」存到 iPhone。<br>儲存後點「切割下一首」繼續，記憶體會自動釋放。';
   } else if(isDesktop){
     dot.style.background='var(--ok)';txt.textContent='電腦';
     $('noteBox').innerHTML='💻 <strong>電腦模式：</strong>全部切割完成後，點「⬇ 一次下載全部」自動批次下載所有曲目。';
@@ -484,7 +484,19 @@ function setupIosPanel(t,i,total,blob,filename){
   prevBtn.href=url;
   prevBtn.download=filename;
   prevBtn.className='ios-dl-btn';
-  prevBtn.onclick=ev=>{ev.preventDefault();window.open(url,'_blank');};
+  prevBtn.onclick=async ev=>{
+    ev.preventDefault();
+    // iOS 15+: Web Share API — 彈出原生分享，選「儲存至檔案」即可存檔
+    const shareFile=new File([blob],filename,{type:blob.type});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[shareFile]})){
+      try{ await navigator.share({files:[shareFile],title:filename}); return; }
+      catch(e){ if(e.name==='AbortError')return; } // 使用者取消就不繼續
+    }
+    // iOS 17.4+ fallback: <a download> 可觸發下載到「檔案」
+    const a=document.createElement('a');
+    a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  };
 
   const nextBtn=$('iosNextBtn');
   nextBtn.textContent=isLast?'✅ 全部完成':'切割下一首 →';
@@ -493,8 +505,8 @@ function setupIosPanel(t,i,total,blob,filename){
 
   $('iosHint').className='ios-hint ok';
   $('iosHint').textContent=isLast
-    ?'這是最後一首，下載後即完成！'
-    :'下載後點「切割下一首」，記憶體會自動釋放';
+    ?'這是最後一首！點上方按鈕，選「儲存至檔案」完成存檔'
+    :'點上方按鈕選「儲存至檔案」存檔後，再點「切割下一首」';
 
   // Add to done list
   const doneList=$('iosDoneList');
